@@ -3,12 +3,7 @@ import { buttonVariants } from "@/components/ui/button"
 import { UserAuthForm } from "@/components/ui/user-auth-form"
 import {Link} from "react-router-dom";
 
-export const metadata = {
-  title: "Authentication",
-  description: "Authentication forms built using the components.",
-}
-
-export default function AuthenticationPage() {
+export const AuthenticationPage = () => {
   return (
     <>
       <div className="md:hidden">
@@ -68,7 +63,7 @@ export default function AuthenticationPage() {
         <div className="lg:p-8">
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
             <div className="flex flex-col space-y-2 text-center">
-              <h1 className="text-2xl font-semibold tracking-tight text-white">
+              <h1 className="text-2xl font-semibold tracking-tight">
                 Create an account
               </h1>
               <p className="text-sm text-muted-foreground">

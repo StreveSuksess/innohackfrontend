@@ -5,11 +5,14 @@ import { Provider } from 'react-redux'
 import App from './App.tsx'
 import './index.css'
 import { store } from './redux/store.ts'
+import {ThemeProvider} from "next-themes";
 
 createRoot(document.getElementById('root')!).render(
 	<StrictMode>
 		<Provider store={store}>
-			<App />
+			<ThemeProvider attribute={"class"}>
+				<App />
+			</ThemeProvider>
 		</Provider>
 	</StrictMode>
 )
