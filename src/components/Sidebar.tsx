@@ -20,7 +20,7 @@ const projects = [
 	{ name: 'Project C', href: '#' },
 ]
 
-function Sidebar() {
+const Sidebar = () => {
 	const [showProjects, setShowProjects] = useState(false)
 
 	const toggleView = () => {
@@ -28,7 +28,7 @@ function Sidebar() {
 	}
 
 	return (
-		<div className='relative flex flex-col h-screen w-64 bg-gray-900 text-white'>
+		<div className='relative flex flex-col h-[calc(100vh-8px)] w-64 bg-zinc-900 text-white rounded-xl'>
 			<div className='flex items-center justify-between px-6 py-6'>
 				<h1 className='text-2xl font-bold'>
 					{showProjects ? 'My Project' : 'Projects'}
@@ -36,7 +36,7 @@ function Sidebar() {
 
 				<button
 					onClick={toggleView}
-					className='p-1 rounded-md hover:bg-gray-800 transition-colors duration-200'
+					className='p-1 rounded-md hover:bg-zinc-800 transition-colors duration-200'
 				>
 					{showProjects ? (
 						<ChevronLeftIcon className='w-6 h-6' />
@@ -58,7 +58,7 @@ function Sidebar() {
 								<a
 									key={desk.name}
 									href={desk.href}
-									className='flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-800 transition-colors duration-200'
+									className='flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-zinc-800 transition-colors duration-200'
 								>
 									<Squares2X2Icon className='w-5 h-5 mr-3' />
 									{desk.name}
@@ -79,7 +79,7 @@ function Sidebar() {
 								<a
 									key={project.name}
 									href={project.href}
-									className='flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-800 transition-colors duration-200'
+									className='flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-zinc-800 transition-colors duration-200'
 								>
 									<Squares2X2Icon className='w-5 h-5 mr-3' />
 									{project.name}
@@ -92,7 +92,7 @@ function Sidebar() {
 
 			<div className='py-3'>
 				<div className='px-2 py-2'>
-					<button className='flex items-center w-full px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-800 transition-colors duration-200'>
+					<button className='flex items-center w-full px-3 py-2 text-sm font-medium rounded-md hover:bg-zinc-800 transition-colors duration-200'>
 						<Cog6ToothIcon className='w-5 h-5 mr-3' />
 						Settings
 					</button>
