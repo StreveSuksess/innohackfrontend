@@ -5,7 +5,9 @@ import { Label } from "@/components/ui/label"
 import {HTMLAttributes, SyntheticEvent, useState} from "react";
 import {Button} from "@/components/ui/button.tsx";
 
-interface UserAuthFormProps extends HTMLAttributes<HTMLDivElement> {}
+interface UserAuthFormProps extends HTMLAttributes<HTMLDivElement> {
+  isLogIn?: boolean
+}
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -36,12 +38,29 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               autoCorrect="off"
               disabled={isLoading}
             />
+            {
+              props?.isLogIn &&
+              <>
+                <Label className="sr-only" htmlFor="password">
+                  Password
+                </Label>
+                <Input
+                  id="password"
+                  placeholder="password"
+                  type="password"
+                  autoCapitalize="none"
+                  autoComplete="email"
+                  autoCorrect="off"
+                  disabled={isLoading}
+                />
+              </>
+            }
           </div>
           <Button variant={"default"} disabled={isLoading}>
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Sign In with Email
+            Log In
           </Button>
         </div>
       </form>
