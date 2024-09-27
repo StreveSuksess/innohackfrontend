@@ -9,7 +9,11 @@ interface UserAuthFormProps extends HTMLAttributes<HTMLDivElement> {
 	login?: boolean
 }
 
-export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+export function UserAuthForm({
+	className,
+	login,
+	...props
+}: UserAuthFormProps) {
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 
 	async function onSubmit(event: SyntheticEvent) {
@@ -39,7 +43,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 							autoCorrect='off'
 							disabled={isLoading}
 						/>
-						{props?.login && (
+
+						{login && (
 							<>
 								<Label className='sr-only' htmlFor='password'>
 									Password
