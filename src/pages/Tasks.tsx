@@ -1,4 +1,5 @@
 import CreateEntity from '@/components/CreateEntity'
+import { DatePickerWithRange } from '@/components/DatePickerWithRange'
 import { History } from '@/components/History'
 import { Member } from '@/components/Member'
 import { Task } from '@/components/Task'
@@ -12,6 +13,16 @@ import {
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from '@/components/ui/dialog'
+import {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
 	DropdownMenuContent,
@@ -21,7 +32,6 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import {
 	Table,
 	TableBody,
@@ -30,17 +40,7 @@ import {
 	TableRow,
 } from '@/components/ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import {
-	Home,
-	LineChart,
-	ListFilter,
-	Package,
-	Package2,
-	PanelLeft,
-	Search,
-	ShoppingCart,
-	Users2,
-} from 'lucide-react'
+import { ListFilter, Search } from 'lucide-react'
 import React, { useState, ChangeEvent } from 'react'
 import { Link } from 'react-router-dom'
 
@@ -222,16 +222,6 @@ export const Tasks: React.FC = () => {
 							</BreadcrumbItem>
 						</BreadcrumbList>
 					</Breadcrumb>
-					<DropdownMenu>
-						<DropdownMenuContent align='end'>
-							<DropdownMenuLabel>My Account</DropdownMenuLabel>
-							<DropdownMenuSeparator />
-							<DropdownMenuItem>Settings</DropdownMenuItem>
-							<DropdownMenuItem>Support</DropdownMenuItem>
-							<DropdownMenuSeparator />
-							<DropdownMenuItem>Logout</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
 				</header>
 				<main className='grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8'>
 					<Tabs defaultValue='tasks'>
@@ -315,11 +305,39 @@ export const Tasks: React.FC = () => {
 											</DropdownMenuContent>
 										</DropdownMenu>
 
-										<CreateEntity
-											title='Add Task'
-											description='Add a new task'
-											className='bg-white text-black flex justify-center items-center hover:bg-white'
-										></CreateEntity>
+										<Dialog>
+											<DialogTrigger>
+												<Button className='w-full'>Add task</Button>
+											</DialogTrigger>
+
+											<DialogContent>
+												<DialogHeader>
+													<DialogTitle>Add task</DialogTitle>
+
+													<DialogDescription>
+														Add a new task to your desk
+													</DialogDescription>
+												</DialogHeader>
+
+												<form className='w-full'>
+													<Input placeholder='Task' className='mb-2' />
+
+													<DatePickerWithRange className='w-full' />
+
+													<DialogFooter className='gap-2 sm:justify-between mt-5'>
+														<DialogClose asChild>
+															<Button
+																type='submit'
+																variant='default'
+																className='w-full'
+															>
+																Save
+															</Button>
+														</DialogClose>
+													</DialogFooter>
+												</form>
+											</DialogContent>
+										</Dialog>
 									</div>
 								</CardHeader>
 								<CardContent>
@@ -374,11 +392,38 @@ export const Tasks: React.FC = () => {
 											removeMember={removeMember}
 										/>
 									))}
-									<CreateEntity
-										title='Add Member'
-										description='Add a new member'
-										className='bg-white text-black flex justify-center items-center hover:bg-white'
-									></CreateEntity>
+
+									<Dialog>
+										<DialogTrigger>
+											<Button className='w-full'>Add member</Button>
+										</DialogTrigger>
+
+										<DialogContent>
+											<DialogHeader>
+												<DialogTitle>Invite user</DialogTitle>
+
+												<DialogDescription>
+													Invite other users to your project
+												</DialogDescription>
+											</DialogHeader>
+
+											<form className='w-full'>
+												<Input placeholder='email' />
+
+												<DialogFooter className='gap-2 sm:justify-between mt-5'>
+													<DialogClose asChild>
+														<Button
+															type='submit'
+															variant='default'
+															className='w-full'
+														>
+															Save
+														</Button>
+													</DialogClose>
+												</DialogFooter>
+											</form>
+										</DialogContent>
+									</Dialog>
 								</CardContent>
 							</Card>
 						</TabsContent>
