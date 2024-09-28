@@ -2,30 +2,21 @@ import './App.css'
 import Main from './pages/Main'
 import { AuthenticationPage } from '@/pages/AuthentificationPage.tsx'
 import { SignUpPage } from '@/pages/SignUp.tsx'
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import {Tasks} from "@/pages/Tasks.tsx";
-
-const router = createBrowserRouter([
-	{
-		path: '/',
-		element: <Main />,
-	},
-	{
-		path: '/login',
-		element: <AuthenticationPage />,
-	},
-	{
-		path: '/signup',
-		element: <SignUpPage />,
-	},
-	{
-		path: '/tasks',
-		element: <Tasks />,
-	},
-])
+import { Tasks } from '@/pages/Tasks.tsx'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 const App = () => {
-	return <RouterProvider router={router} />
+	return (
+		<BrowserRouter>
+			<Routes>
+				<Route path='/' element={<Main />}>
+					<Route path='/login' element={<AuthenticationPage />} />
+					<Route path='/signup' element={<SignUpPage />} />
+					<Route path='/tasks' element={<Tasks />} />
+				</Route>
+			</Routes>
+		</BrowserRouter>
+	)
 }
 
 export default App
