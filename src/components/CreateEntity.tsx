@@ -7,6 +7,7 @@ interface CreateEntityProps {
 	title: string
 	description: string
 	className?: string
+	isName?: boolean
 }
 
 const CreateEntity = ({
@@ -14,6 +15,7 @@ const CreateEntity = ({
 	description,
 	className,
 	children,
+	isName = true,
 }: PropsWithChildren<CreateEntityProps>) => {
 	return (
 		<Modal title={title} description={description} className={className}>
@@ -21,7 +23,7 @@ const CreateEntity = ({
 				{title} name
 			</Label>
 
-			<Input id={title} placeholder={`${title} name`} />
+			<Input id={title} placeholder={`${title} ${isName && 'name'}`} />
 
 			{children}
 		</Modal>

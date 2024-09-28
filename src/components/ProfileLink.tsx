@@ -10,10 +10,13 @@ import {
 	DropdownMenuTrigger,
 } from './ui/dropdown-menu'
 import Cookies from 'js-cookie'
+import { useNavigate } from 'react-router-dom'
 
 const ProfileLink = () => {
+	const navigate = useNavigate()
 	const logout = () => {
 		Cookies.remove('Authorization')
+		navigate('/login')
 	}
 
 	return (

@@ -71,6 +71,21 @@ const Sidebar = () => {
 								description='Create a new desk'
 								className='bg-white text-black flex justify-center items-center hover:bg-white'
 							/>
+
+							<CreateEntity
+								title='Edit project'
+								description='Edit your project information'
+								className='bg-white text-black flex justify-center items-center hover:bg-white'
+							>
+								<Input placeholder='Edit project description' />
+							</CreateEntity>
+
+							<CreateEntity
+								title='Invite members by email'
+								description='Invite members to your project'
+								className='bg-white text-black flex justify-center items-center hover:bg-white'
+								isName={false}
+							/>
 						</nav>
 					</ScrollArea>
 				</div>
