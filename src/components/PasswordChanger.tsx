@@ -1,4 +1,5 @@
 import Modal from './Modal'
+import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
 
@@ -20,6 +21,8 @@ const PasswordChanger = () => {
 
 				<Input id='new-password' placeholder='New password' type='password' />
 			</div>
+
+			<Button>Save</Button>
 		</Modal>
 	)
 }

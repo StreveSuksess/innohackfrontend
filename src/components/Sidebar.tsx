@@ -1,6 +1,7 @@
 import CreateEntity from './CreateEntity'
 import ProfileLink from './ProfileLink'
 import { Input } from './ui/input'
+import { useAppSelector } from '@/hooks/useAppSelector'
 import { ChevronLeftIcon, Squares2X2Icon } from '@heroicons/react/24/outline'
 import { ScrollArea } from '@radix-ui/react-scroll-area'
 import { useState } from 'react'
@@ -11,15 +12,9 @@ const desks = [
 	{ name: 'Desk 3', href: '#' },
 ]
 
-const projects = [
-	{ name: 'Project A', href: '#' },
-	{ name: 'Project B', href: '#' },
-	{ name: 'Project C', href: '#' },
-]
-
 const Sidebar = () => {
 	const [showProjects, setShowProjects] = useState(false)
-	// const projects = useAppSelector((state) => state.projects);
+	const projects = useAppSelector(state => state.projects.projects)
 
 	const toggleView = () => {
 		setShowProjects(!showProjects)
@@ -116,7 +111,6 @@ const Sidebar = () => {
 			</div>
 
 			<div className='py-3'>
-				<div className='absolute bottom-[0px] left-[10px] bg-slate-700 blur-[100px] w-[150px] h-[150px] rounded-full' />
 				<ProfileLink />
 			</div>
 		</div>
