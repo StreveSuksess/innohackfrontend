@@ -12,7 +12,7 @@ export const AuthenticationPage = () => {
 		try {
 			const response = await login(data)
 			navigate('/tasks')
-			console.log('a')
+			console.log(response)
 			Cookies.set('Authorization', response.data.token, { path: '/' })
 		} catch (e) {
 			console.log(e)
