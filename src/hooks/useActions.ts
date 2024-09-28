@@ -1,12 +1,15 @@
-// import { useDispatch } from 'react-redux'
-// import { bindActionCreators } from '@reduxjs/toolkit'
-// import { cartActions } from '../store/slices/CartSlice.ts'
-//
-// const actions = {
-//   ...cartActions
-// }
-//
-// export const useActions = () => {
-//   const dispatch = useDispatch()
-//   return bindActionCreators(actions, dispatch)
-// }
+import { projectsActions } from "@/redux/slices/ProjectSlice.ts";
+import { tasksActions } from "@/redux/slices/TaskSlice.ts";
+import { bindActionCreators } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
+
+
+const actions = {
+  ...projectsActions,
+  ...tasksActions,
+};
+
+export const useActions = () => {
+  const dispatch = useDispatch();
+  return bindActionCreators(actions, dispatch);
+};

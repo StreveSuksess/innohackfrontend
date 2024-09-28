@@ -97,6 +97,9 @@ export const ProjectsSLice = createSlice({
 
       state.projects[projectIndex] = action.payload.newProjectSettings;
     },
+    setProjects: (state, action: PayloadAction<IInitialState>) => {
+      state.projects = action.payload.projects;
+    },
   },
 });
 
