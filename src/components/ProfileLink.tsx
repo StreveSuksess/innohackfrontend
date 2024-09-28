@@ -9,8 +9,13 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from './ui/dropdown-menu'
+import Cookies from 'js-cookie'
 
 const ProfileLink = () => {
+	const logout = () => {
+		Cookies.remove('Authorization')
+	}
+
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger className='w-full outline-none'>
@@ -38,7 +43,9 @@ const ProfileLink = () => {
 				<PasswordChanger />
 				<Settings />
 				<DropdownMenuSeparator />
-				<DropdownMenuItem className='cursor-pointer'>Logout</DropdownMenuItem>
+				<DropdownMenuItem onClick={logout} className='cursor-pointer'>
+					Logout
+				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>
 	)
