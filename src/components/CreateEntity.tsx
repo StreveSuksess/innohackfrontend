@@ -31,8 +31,15 @@ const CreateEntity = ({
   const onSubmit = async (data: { name: string; description: string }) => {
     try {
       const response = await addProjectFetch(data);
-      console.log(response);
-      addProject(response);
+      addProject({
+        projectName: response.data.name,
+        id: response.data.id,
+        ownerName:
+          response.data.creator.firstName +
+          " " +
+          response.data.creator.lastName,
+        description: response.data.description,
+      });
     } catch (e) {
       console.log(e);
     }

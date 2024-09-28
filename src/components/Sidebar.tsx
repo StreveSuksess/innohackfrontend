@@ -1,9 +1,10 @@
 import CreateEntity from "./CreateEntity";
 import ProfileLink from "./ProfileLink";
 import { Input } from "./ui/input";
+import { useAppSelector } from "@/hooks/useAppSelector.ts";
 import { ChevronLeftIcon, Squares2X2Icon } from "@heroicons/react/24/outline";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 const desks = [
@@ -20,7 +21,11 @@ const projects = [
 
 const Sidebar = () => {
   const [showProjects, setShowProjects] = useState(false);
-  // const projects = useAppSelector((state) => state.projects);
+  const projectsF = useAppSelector((state) => state.projects);
+
+  useEffect(() => {
+    console.log(projectsF);
+  });
 
   const toggleView = () => {
     setShowProjects(!showProjects);
