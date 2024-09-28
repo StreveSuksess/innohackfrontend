@@ -1,16 +1,21 @@
-import Sidebar from '@/components/Sidebar'
-import { Outlet } from 'react-router-dom'
+import Sidebar from "@/components/Sidebar";
+import { Outlet } from "react-router-dom";
 
 const Main = () => {
-	return (
-		<div className='flex bg-muted/40'>
-			<Sidebar />
+  return (
+    <div className="flex bg-muted/40">
+      <Sidebar />
 
-			<div>
-				<Outlet />
-			</div>
-		</div>
-	)
-}
+      <div
+        style={{
+          marginLeft: "260px",
+        }}
+        className="w-full"
+      >
+        <Outlet />
+      </div>
+    </div>
+  );
+};
 
-export default Main
+export default Main;
