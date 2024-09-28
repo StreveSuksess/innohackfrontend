@@ -1,4 +1,6 @@
 import CreateEntity from '@/components/CreateEntity'
+import { History } from '@/components/History'
+import { Member } from '@/components/Member'
 import { Task } from '@/components/Task'
 import {
 	Breadcrumb,
@@ -19,14 +21,6 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
-import {
-	Select,
-	SelectContent,
-	SelectGroup,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '@/components/ui/select'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import {
 	Table,
@@ -50,18 +44,33 @@ import {
 import React, { useState, ChangeEvent } from 'react'
 import { Link } from 'react-router-dom'
 
+type VersionType = {
+	versionId: number
+	name: string
+	status: 'In process' | 'Completed' | 'Failed'
+	timestamp: string
+}
+
 type TaskType = {
 	id: number
 	name: string
 	status: 'In process' | 'Completed' | 'Failed'
 	creator: string
 	createdAt: string
+	versions: VersionType[]
+}
+
+type MemberType = {
+	id: number
+	name: string
+	role: string
 }
 
 export const Tasks: React.FC = () => {
 	const projectName = 'Project Name'
 	const deskName = 'Desk Name'
 
+	// State for tasks
 	const [tasks, setTasks] = useState<TaskType[]>([
 		{
 			id: 1,
@@ -69,6 +78,14 @@ export const Tasks: React.FC = () => {
 			status: 'In process',
 			creator: 'JJJ',
 			createdAt: '2023-07-12 10:42 AM',
+			versions: [
+				{
+					versionId: 1,
+					name: 'Laser Lemonade Machine',
+					status: 'In process',
+					timestamp: '2023-07-12 10:42 AM',
+				},
+			],
 		},
 		{
 			id: 2,
@@ -76,6 +93,14 @@ export const Tasks: React.FC = () => {
 			status: 'Completed',
 			creator: 'AAA',
 			createdAt: '2023-07-13 11:00 AM',
+			versions: [
+				{
+					versionId: 1,
+					name: 'Task 2',
+					status: 'Completed',
+					timestamp: '2023-07-13 11:00 AM',
+				},
+			],
 		},
 	])
 
@@ -86,6 +111,13 @@ export const Tasks: React.FC = () => {
 	}>({
 		status: [],
 	})
+
+	const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null)
+
+	const [members, setMembers] = useState<MemberType[]>([
+		{ id: 1, name: 'John Doe', role: 'Developer' },
+		{ id: 2, name: 'Jane Smith', role: 'Designer' },
+	])
 
 	const handleStatusFilterChange = (status: string, checked: boolean) => {
 		setSelectedFilters(prevFilters => {
@@ -101,7 +133,23 @@ export const Tasks: React.FC = () => {
 
 	const updateTask = (updatedTask: TaskType) => {
 		setTasks(prevTasks =>
-			prevTasks.map(task => (task.id === updatedTask.id ? updatedTask : task))
+			prevTasks.map(task => {
+				if (task.id === updatedTask.id) {
+					return {
+						...updatedTask,
+						versions: [
+							...task.versions,
+							{
+								versionId: task.versions.length + 1,
+								name: updatedTask.name,
+								status: updatedTask.status,
+								timestamp: new Date().toLocaleString(),
+							},
+						],
+					}
+				}
+				return task
+			})
 		)
 	}
 
@@ -119,65 +167,47 @@ export const Tasks: React.FC = () => {
 		return matchesSearchTerm && matchesStatusFilter
 	})
 
+	const rollbackTask = (taskId: number, version: VersionType) => {
+		setTasks(prevTasks =>
+			prevTasks.map(task => {
+				if (task.id === taskId) {
+					return {
+						...task,
+						name: version.name,
+						status: version.status,
+						versions: [
+							...task.versions,
+							{
+								versionId: task.versions.length + 1,
+								name: task.name,
+								status: task.status,
+								timestamp: new Date().toLocaleString(),
+							},
+						],
+					}
+				}
+				return task
+			})
+		)
+	}
+
+	const addMember = (member: MemberType) => {
+		setMembers(prevMembers => [...prevMembers, member])
+	}
+
+	const removeMember = (memberId: number) => {
+		setMembers(prevMembers =>
+			prevMembers.filter(member => member.id !== memberId)
+		)
+	}
+
+	const selectedTask = tasks.find(task => task.id === selectedTaskId) || null
+
 	return (
 		<div className='flex min-h-screen w-full'>
 			<div className='flex flex-col sm:gap-4 sm:py-4 w-full'>
-				<header className='sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6'>
-					<Sheet>
-						<SheetTrigger asChild>
-							<Button size='icon' variant='outline' className='sm:hidden'>
-								<PanelLeft className='h-5 w-5' />
-								<span className='sr-only'>Toggle Menu</span>
-							</Button>
-						</SheetTrigger>
-						<SheetContent side='left' className='sm:max-w-xs'>
-							<nav className='grid gap-6 text-lg font-medium'>
-								<Link
-									to='#'
-									className='group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base'
-								>
-									<Package2 className='h-5 w-5 transition-all group-hover:scale-110' />
-									<span className='sr-only'>Acme Inc</span>
-								</Link>
-								<Link
-									to='#'
-									className='flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground'
-								>
-									<Home className='h-5 w-5' />
-									Dashboard
-								</Link>
-								<Link
-									to='#'
-									className='flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground'
-								>
-									<ShoppingCart className='h-5 w-5' />
-									Orders
-								</Link>
-								<Link
-									to='#'
-									className='flex items-center gap-4 px-2.5 text-foreground'
-								>
-									<Package className='h-5 w-5' />
-									Products
-								</Link>
-								<Link
-									to='#'
-									className='flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground'
-								>
-									<Users2 className='h-5 w-5' />
-									Customers
-								</Link>
-								<Link
-									to='#'
-									className='flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground'
-								>
-									<LineChart className='h-5 w-5' />
-									Settings
-								</Link>
-							</nav>
-						</SheetContent>
-					</Sheet>
-					<Breadcrumb className='hidden md:flex'>
+				<header className='top-0 z-30 flex items-center gap-4 static h-auto border-0 bg-transparent px-6'>
+					<Breadcrumb className='md:flex'>
 						<BreadcrumbList>
 							<BreadcrumbItem>
 								<BreadcrumbLink asChild>
@@ -208,8 +238,8 @@ export const Tasks: React.FC = () => {
 						<div className='flex items-center'>
 							<TabsList>
 								<TabsTrigger value='tasks'>Tasks</TabsTrigger>
-								<TabsTrigger value='hierarchy'>History</TabsTrigger>
-								<TabsTrigger value='members'>Project members</TabsTrigger>
+								<TabsTrigger value='history'>History</TabsTrigger>
+								<TabsTrigger value='members'>Project Members</TabsTrigger>
 							</TabsList>
 						</div>
 						<TabsContent value='tasks'>
@@ -276,26 +306,10 @@ export const Tasks: React.FC = () => {
 										</DropdownMenu>
 
 										<CreateEntity
-											title='Add task'
-											description='Add new task'
+											title='Add Task'
+											description='Add a new task'
 											className='bg-white text-black flex justify-center items-center hover:bg-white'
-										>
-											<Select>
-												<SelectTrigger className='w-[100%]'>
-													<SelectValue placeholder='Select a status' />
-												</SelectTrigger>
-												<SelectContent>
-													<SelectGroup>
-														<SelectItem value='In process'>
-															In process
-														</SelectItem>
-
-														<SelectItem value='Completed'>Completed</SelectItem>
-														<SelectItem value='Failed'>Failed</SelectItem>
-													</SelectGroup>
-												</SelectContent>
-											</Select>
-										</CreateEntity>
+										></CreateEntity>
 									</div>
 								</CardHeader>
 								<CardContent>
@@ -329,13 +343,32 @@ export const Tasks: React.FC = () => {
 								</CardContent>
 							</Card>
 						</TabsContent>
-						<TabsContent value={'members'}>
+						<TabsContent value='history'>
+							<History
+								tasks={tasks}
+								selectedTask={selectedTask}
+								setSelectedTaskId={setSelectedTaskId}
+								rollbackTask={rollbackTask}
+							/>
+						</TabsContent>
+						<TabsContent value='members'>
 							<Card x-chunk='dashboard-01-chunk-5'>
 								<CardHeader>
-									<CardTitle>Recent Sales</CardTitle>
+									<CardTitle>Project Members</CardTitle>
 								</CardHeader>
 								<CardContent className='grid gap-8'>
-									{/* Render members here */}
+									{members.map(member => (
+										<Member
+											key={member.id}
+											member={member}
+											removeMember={removeMember}
+										/>
+									))}
+									<CreateEntity
+										title='Add Member'
+										description='Add a new member'
+										className='bg-white text-black flex justify-center items-center hover:bg-white'
+									></CreateEntity>
 								</CardContent>
 							</Card>
 						</TabsContent>

@@ -4,12 +4,20 @@ import { ToggleGroupItem } from '@/components/ui/toggle-group'
 import { ToggleGroup } from '@radix-ui/react-toggle-group'
 import React, { useState, useEffect, ChangeEvent, KeyboardEvent } from 'react'
 
+type VersionType = {
+	versionId: number
+	name: string
+	status: 'In process' | 'Completed' | 'Failed'
+	timestamp: string
+}
+
 type TaskType = {
 	id: number
 	name: string
 	status: 'In process' | 'Completed' | 'Failed'
 	creator: string
 	createdAt: string
+	versions: VersionType[]
 }
 
 type TaskProps = {
@@ -29,7 +37,7 @@ export const Task: React.FC<TaskProps> = ({ task, updateTask, deleteTask }) => {
 	}
 
 	useEffect(() => {
-		const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+		const onKeyDown = (e: KeyboardEvent) => {
 			if (e.key === 'Enter') {
 				editTask()
 			}
@@ -64,6 +72,7 @@ export const Task: React.FC<TaskProps> = ({ task, updateTask, deleteTask }) => {
 
 				{!isEditingTask && (
 					<button onClick={() => setIsEditingTask(true)}>
+						{/* Edit Icon SVG */}
 						<svg
 							width='20'
 							height='20'
@@ -96,6 +105,7 @@ export const Task: React.FC<TaskProps> = ({ task, updateTask, deleteTask }) => {
 			<TableCell className='hidden md:table-cell'>{task.createdAt}</TableCell>
 			<TableCell>
 				<button onClick={() => deleteTask(task.id)}>
+					{/* Delete Icon SVG */}
 					<svg
 						xmlns='http://www.w3.org/2000/svg'
 						width='24'
