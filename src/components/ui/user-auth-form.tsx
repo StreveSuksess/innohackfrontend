@@ -60,33 +60,6 @@ export function UserAuthForm({
 						)}
 					</div>
 
-					<Input
-						id='email'
-						placeholder='name@example.com'
-						type='email'
-						autoCapitalize='none'
-						autoComplete='email'
-						autoCorrect='off'
-						disabled={isLoading}
-					/>
-
-					{login && (
-						<>
-							<Label className='sr-only' htmlFor='password'>
-								Password
-							</Label>
-							<Input
-								id='password'
-								placeholder='password'
-								type='password'
-								autoCapitalize='none'
-								autoComplete='email'
-								autoCorrect='off'
-								disabled={isLoading}
-							/>
-						</>
-					)}
-
 					<Button variant={'default'} disabled={isLoading}>
 						{isLoading && (
 							<Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
