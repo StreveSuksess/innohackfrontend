@@ -1,6 +1,5 @@
 import CreateEntity from '@/components/CreateEntity'
-import { Member } from '@/components/Member.tsx'
-import { Task } from '@/components/Task.tsx'
+import { Task } from '@/components/Task'
 import {
 	Breadcrumb,
 	BreadcrumbItem,
@@ -19,7 +18,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Input } from '@/components/ui/input.tsx'
+import { Input } from '@/components/ui/input'
 import {
 	Select,
 	SelectContent,
@@ -48,14 +47,77 @@ import {
 	ShoppingCart,
 	Users2,
 } from 'lucide-react'
+import React, { useState, ChangeEvent } from 'react'
 import { Link } from 'react-router-dom'
 
-export const description =
-	'An products dashboard with a sidebar navigation. The sidebar has icon navigation. The content area has a breadcrumb and search in the header. It displays a list of products in a table with actions.'
+type TaskType = {
+	id: number
+	name: string
+	status: 'In process' | 'Completed' | 'Failed'
+	creator: string
+	createdAt: string
+}
 
-export const Tasks = () => {
+export const Tasks: React.FC = () => {
 	const projectName = 'Project Name'
 	const deskName = 'Desk Name'
+
+	const [tasks, setTasks] = useState<TaskType[]>([
+		{
+			id: 1,
+			name: 'Laser Lemonade Machine',
+			status: 'In process',
+			creator: 'JJJ',
+			createdAt: '2023-07-12 10:42 AM',
+		},
+		{
+			id: 2,
+			name: 'Task 2',
+			status: 'Completed',
+			creator: 'AAA',
+			createdAt: '2023-07-13 11:00 AM',
+		},
+	])
+
+	const [searchTerm, setSearchTerm] = useState<string>('')
+
+	const [selectedFilters, setSelectedFilters] = useState<{
+		status: string[]
+	}>({
+		status: [],
+	})
+
+	const handleStatusFilterChange = (status: string, checked: boolean) => {
+		setSelectedFilters(prevFilters => {
+			const newStatusFilters = checked
+				? [...prevFilters.status, status]
+				: prevFilters.status.filter(s => s !== status)
+			return {
+				...prevFilters,
+				status: newStatusFilters,
+			}
+		})
+	}
+
+	const updateTask = (updatedTask: TaskType) => {
+		setTasks(prevTasks =>
+			prevTasks.map(task => (task.id === updatedTask.id ? updatedTask : task))
+		)
+	}
+
+	const deleteTask = (taskId: number) => {
+		setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId))
+	}
+
+	const filteredTasks = tasks.filter(task => {
+		const matchesSearchTerm = task.name
+			.toLowerCase()
+			.includes(searchTerm.toLowerCase())
+		const matchesStatusFilter =
+			selectedFilters.status.length === 0 ||
+			selectedFilters.status.includes(task.status)
+		return matchesSearchTerm && matchesStatusFilter
+	})
 
 	return (
 		<div className='flex min-h-screen w-full'>
@@ -162,6 +224,10 @@ export const Tasks = () => {
 												type='search'
 												placeholder='Search...'
 												className='w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]'
+												value={searchTerm}
+												onChange={(e: ChangeEvent<HTMLInputElement>) =>
+													setSearchTerm(e.target.value)
+												}
 											/>
 										</div>
 										<DropdownMenu>
@@ -178,16 +244,33 @@ export const Tasks = () => {
 												</Button>
 											</DropdownMenuTrigger>
 											<DropdownMenuContent align='end'>
-												<DropdownMenuLabel>Filter by</DropdownMenuLabel>
+												<DropdownMenuLabel>Filter by status</DropdownMenuLabel>
 												<DropdownMenuSeparator />
-												<DropdownMenuCheckboxItem checked>
-													Status
+												<DropdownMenuCheckboxItem
+													checked={selectedFilters.status.includes(
+														'In process'
+													)}
+													onCheckedChange={(checked: boolean) =>
+														handleStatusFilterChange('In process', checked)
+													}
+												>
+													In process
 												</DropdownMenuCheckboxItem>
-												<DropdownMenuCheckboxItem>
-													Date
+												<DropdownMenuCheckboxItem
+													checked={selectedFilters.status.includes('Completed')}
+													onCheckedChange={(checked: boolean) =>
+														handleStatusFilterChange('Completed', checked)
+													}
+												>
+													Completed
 												</DropdownMenuCheckboxItem>
-												<DropdownMenuCheckboxItem>
-													Name
+												<DropdownMenuCheckboxItem
+													checked={selectedFilters.status.includes('Failed')}
+													onCheckedChange={(checked: boolean) =>
+														handleStatusFilterChange('Failed', checked)
+													}
+												>
+													Failed
 												</DropdownMenuCheckboxItem>
 											</DropdownMenuContent>
 										</DropdownMenu>
@@ -233,7 +316,14 @@ export const Tasks = () => {
 											</TableRow>
 										</TableHeader>
 										<TableBody>
-											<Task />
+											{filteredTasks.map(task => (
+												<Task
+													key={task.id}
+													task={task}
+													updateTask={updateTask}
+													deleteTask={deleteTask}
+												/>
+											))}
 										</TableBody>
 									</Table>
 								</CardContent>
@@ -245,11 +335,7 @@ export const Tasks = () => {
 									<CardTitle>Recent Sales</CardTitle>
 								</CardHeader>
 								<CardContent className='grid gap-8'>
-									<Member />
-									<Member />
-									<Member />
-									<Member />
-									<Member />
+									{/* Render members here */}
 								</CardContent>
 							</Card>
 						</TabsContent>
