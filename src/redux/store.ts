@@ -1,5 +1,6 @@
 import { projectsReducer } from "@/redux/slices/ProjectSlice.ts";
 import { tasksReducer } from "@/redux/slices/TaskSlice.ts";
+import { userReducer } from "@/redux/slices/UserSlice.ts";
 import authApi from "@/services/authApi.ts";
 import projectsApi from "@/services/projectsApi.ts";
 import userApi from "@/services/userApi.ts";
@@ -10,6 +11,7 @@ export const store = configureStore({
   reducer: {
     projects: projectsReducer,
     tasks: tasksReducer,
+    user: userReducer,
     [authApi.reducerPath]: authApi.reducer,
     [projectsApi.reducerPath]: projectsApi.reducer,
     [userApi.reducerPath]: userApi.reducer,

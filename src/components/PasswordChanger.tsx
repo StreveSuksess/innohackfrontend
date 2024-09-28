@@ -1,30 +1,62 @@
-import Modal from './Modal'
-import { Button } from './ui/button'
-import { Input } from './ui/input'
-import { Label } from './ui/label'
+import Modal from "./Modal";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import { DialogTrigger } from "@/components/ui/dialog.tsx";
+import { useActions } from "@/hooks/useActions.ts";
+import { useUpdateProfileMutation } from "@/services/userApi.ts";
+import { useForm } from "react-hook-form";
+
 
 const PasswordChanger = () => {
-	return (
-		<Modal title='Change password' description='Change your password'>
-			<div>
-				<Label htmlFor='password' className='sr-only'>
-					Current password
-				</Label>
+  const { register, handleSubmit } = useForm();
+  const [changePassword] = useUpdateProfileMutation();
+  //@ts-ignore
+  const { changePassword: changePasswordLocal } = useActions();
+  //@ts-ignore
 
-				<Input id='password' placeholder='Password' type='password' />
-			</div>
+  const onSubmit = async (data: any) => {
+    await changePassword(data);
+    changePasswordLocal({
+      newPassword: data.newPassword,
+    });
+  };
 
-			<div>
-				<Label htmlFor='new-password' className='sr-only'>
-					New password
-				</Label>
+  return (
+    <Modal title="Change password" description="Change your password">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div>
+          <Label htmlFor="password" className="sr-only">
+            Current password
+          </Label>
 
-				<Input id='new-password' placeholder='New password' type='password' />
-			</div>
+          <Input
+            {...register("oldPassword")}
+            id="password"
+            placeholder="Password"
+            type="password"
+          />
+        </div>
 
-			<Button>Save</Button>
-		</Modal>
-	)
-}
+        <div>
+          <Label htmlFor="new-password" className="sr-only">
+            New password
+          </Label>
 
-export default PasswordChanger
+          <Input
+            {...register("newPassword")}
+            id="new-password"
+            placeholder="New password"
+            type="password"
+          />
+        </div>
+
+        <Button type={"submit"}>
+          <DialogTrigger>Save</DialogTrigger>
+        </Button>
+      </form>
+    </Modal>
+  );
+};
+
+export default PasswordChanger;

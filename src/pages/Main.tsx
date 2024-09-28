@@ -14,11 +14,17 @@ const Main = () => {
     useGetProjectsQuery(null);
   const { data: userData, isLoading: isLoadingUserInfo } =
     useGetUserInfoQuery(null);
-  const { setProjects } = useActions();
+  // @ts-ignore
+  const { setProjects, setUser } = useActions();
 
   useEffect(() => {
-    if (isLoadingProjects && isLoadingUserInfo && !projectsData) return;
-    console.log(userData);
+    if (isLoadingProjects && isLoadingUserInfo && !projectsData && !userData)
+      return;
+
+    if (userData !== null) {
+      // @ts-ignore
+      setUser(userData);
+    }
 
     // @ts-ignore
     if (projectsData?.length > 0) {
