@@ -2,6 +2,7 @@ import Sidebar from "@/components/Sidebar";
 import SidebarSheet from "@/components/SidebarSheet";
 import { useActions } from "@/hooks/useActions.ts";
 import { useGetProjectsQuery } from "@/services/projectsApi.ts";
+import { useGetUserInfoQuery } from "@/services/userApi.ts";
 import { IProject } from "@/types/projectTypes.ts";
 import { Loader } from "lucide-react";
 import { useEffect } from "react";
@@ -9,17 +10,21 @@ import { Outlet } from "react-router-dom";
 
 
 const Main = () => {
-  const { data, isLoading } = useGetProjectsQuery(null);
+  const { data: projectsData, isLoading: isLoadingProjects } =
+    useGetProjectsQuery(null);
+  const { data: userData, isLoading: isLoadingUserInfo } =
+    useGetUserInfoQuery(null);
   const { setProjects } = useActions();
 
   useEffect(() => {
-    if (isLoading && !data) return;
+    if (isLoadingProjects && isLoadingUserInfo && !projectsData) return;
+    console.log(userData);
 
     // @ts-ignore
-    if (data?.length > 0) {
+    if (projectsData?.length > 0) {
       setProjects({
         // @ts-ignore
-        projects: data.map((project) => {
+        projects: projectsData.map((project) => {
           const newProject: IProject = {
             id: project.id,
             name: project.name,
@@ -32,9 +37,9 @@ const Main = () => {
         }),
       });
     }
-  }, [data, isLoading]);
+  }, [projectsData, userData, isLoadingProjects]);
 
-  if (isLoading) return <Loader />;
+  if (isLoadingProjects) return <Loader />;
 
   return (
     <div className="flex bg-muted/40">

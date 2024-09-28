@@ -4,9 +4,6 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 
-export const description =
-  "An products dashboard with a sidebar navigation. The sidebar has icon navigation. The content area has a breadcrumb and search in the header. It displays a list of products in a table with actions.";
-
 export const Desks = () => {
   const { projectId } = useParams();
   const { data, isLoading } = useGetProjectQuery({ projectId: projectId });
