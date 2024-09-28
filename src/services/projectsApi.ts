@@ -4,10 +4,10 @@ interface Creator {
   id: string;
   email: string;
   password: string;
-  avatarURL: null;
-  firstName: null;
-  lastName: null;
-  birthDate: null;
+  avatarURL: string;
+  firstName: string;
+  lastName: string;
+  birthDate: string;
   lastPasswordChange: number;
 }
 
@@ -37,7 +37,7 @@ const projectsApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getProjects: builder.query<{ data: IProjectResponse }, any>({
+    getProjects: builder.query<{ data: IProjectResponse[] }, any>({
       query: () => ({
         url: "/project",
         method: "GET",

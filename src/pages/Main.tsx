@@ -2,6 +2,7 @@ import Sidebar from "@/components/Sidebar";
 import SidebarSheet from "@/components/SidebarSheet";
 import { useActions } from "@/hooks/useActions.ts";
 import { useGetProjectsQuery } from "@/services/projectsApi.ts";
+import { IProject } from "@/types/projectTypes.ts";
 import { Loader } from "lucide-react";
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
@@ -12,9 +13,20 @@ const Main = () => {
   const { setProjects } = useActions();
 
   useEffect(() => {
-    if (isLoading) return;
-    console.log(data);
-    // setProjects(data);
+    if (isLoading || !data) return;
+    setProjects({
+      projects: data.data.map((project) => {
+        const newProject: IProject = {
+          id: project.id,
+          name: project.name,
+          description: project.description,
+          owner: project.creator.firstName,
+          members: [],
+          desks: [],
+        };
+        return newProject;
+      }),
+    });
   }, [data, isLoading]);
 
   if (isLoading) return <Loader />;
