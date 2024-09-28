@@ -1,6 +1,8 @@
 import Modal from "./Modal";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
+import { Button } from "@/components/ui/button.tsx";
+import { DialogClose, DialogFooter } from "@/components/ui/dialog.tsx";
 import { useActions } from "@/hooks/useActions.ts";
 import { useAddProjectMutation } from "@/services/projectsApi.ts";
 import { Loader } from "lucide-react";
@@ -29,6 +31,7 @@ const CreateEntity = ({
   const onSubmit = async (data: { name: string; description: string }) => {
     try {
       const response = await addProjectFetch(data);
+      console.log(response);
       addProject(response);
     } catch (e) {
       console.log(e);
@@ -44,17 +47,29 @@ const CreateEntity = ({
           {title} name
         </Label>
 
-        <Input
-          {...register("title")}
-          id={title}
-          placeholder={`${title} ${isName ? "name" : ""}`}
-        />
-        <Input
-          {...register("description")}
-          placeholder="Description"
-          id="description"
-          className={"mt-2"}
-        />
+        <div className="flex items-center space-x-2">
+          <div className="grid flex-1 gap-2">
+            <Input
+              {...register("name")}
+              id={title}
+              placeholder={`${title} ${isName ? "name" : ""}`}
+            />
+            <Input
+              {...register("description")}
+              placeholder="Description"
+              id="description"
+              className={"mt-2"}
+            />
+          </div>
+        </div>
+
+        <DialogFooter className="gap-2 sm:justify-between mt-5">
+          <DialogClose asChild>
+            <Button type="submit" variant="default">
+              Save
+            </Button>
+          </DialogClose>
+        </DialogFooter>
       </form>
       {children}
     </Modal>
