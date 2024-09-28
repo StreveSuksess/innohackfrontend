@@ -13,7 +13,7 @@ const Main = () => {
 
   useEffect(() => {
     if (isLoading) return;
-    setProjects(data);
+    // setProjects(data);
   }, [data, isLoading]);
 
   if (isLoading) return <Loader />;

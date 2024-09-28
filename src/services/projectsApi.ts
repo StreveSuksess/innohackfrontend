@@ -4,6 +4,18 @@ const projectsApi = createApi({
   reducerPath: "projectsApi",
   baseQuery: fetchBaseQuery({
     baseUrl: import.meta.env.VITE_API_URL + "/me",
+    prepareHeaders: (headers) => {
+      const cookie = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("Authorization="));
+
+      if (cookie) {
+        const token = cookie.split("=")[1];
+        headers.set("Authorization", `${token}`);
+      }
+
+      return headers;
+    },
   }),
   endpoints: (builder) => ({
     getProjects: builder.query<any, any>({
