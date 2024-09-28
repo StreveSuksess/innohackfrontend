@@ -1,10 +1,7 @@
-import { Button } from "./ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -42,18 +39,7 @@ const Modal = ({
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
-
-        <div className="flex items-center space-x-2">
-          <div className="grid flex-1 gap-2">{children}</div>
-        </div>
-
-        <DialogFooter className="gap-2 sm:justify-between">
-          <DialogClose asChild>
-            <Button type="submit" variant="default">
-              Save
-            </Button>
-          </DialogClose>
-        </DialogFooter>
+        {children}
       </DialogContent>
     </Dialog>
   );

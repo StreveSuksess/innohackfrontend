@@ -13,6 +13,7 @@ const Main = () => {
 
   useEffect(() => {
     if (isLoading) return;
+    console.log(data);
     // setProjects(data);
   }, [data, isLoading]);
 
