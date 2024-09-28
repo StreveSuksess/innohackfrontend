@@ -100,6 +100,16 @@ export const ProjectsSLice = createSlice({
     setProjects: (state, action: PayloadAction<IInitialState>) => {
       state.projects = action.payload.projects;
     },
+    setProject: (
+      state,
+      action: PayloadAction<{ projectId: string; project: IProject }>
+    ) => {
+      const projectIndex = state.projects.findIndex(
+        (project) => project.id === action.payload.projectId
+      );
+
+      state.projects[projectIndex] = action.payload.project;
+    },
   },
 });
 

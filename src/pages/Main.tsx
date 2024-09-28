@@ -1,52 +1,56 @@
-import Sidebar from '@/components/Sidebar'
-import SidebarSheet from '@/components/SidebarSheet'
-import { useActions } from '@/hooks/useActions.ts'
-import { useGetProjectsQuery } from '@/services/projectsApi.ts'
-import { IProject } from '@/types/projectTypes.ts'
-import { Loader } from 'lucide-react'
-import { useEffect } from 'react'
-import { Outlet } from 'react-router-dom'
+import Sidebar from "@/components/Sidebar";
+import SidebarSheet from "@/components/SidebarSheet";
+import { useActions } from "@/hooks/useActions.ts";
+import { useGetProjectsQuery } from "@/services/projectsApi.ts";
+import { IProject } from "@/types/projectTypes.ts";
+import { Loader } from "lucide-react";
+import { useEffect } from "react";
+import { Outlet } from "react-router-dom";
+
 
 const Main = () => {
-	const { data, isLoading } = useGetProjectsQuery(null)
-	const { setProjects } = useActions()
+  const { data, isLoading } = useGetProjectsQuery(null);
+  const { setProjects } = useActions();
 
-	useEffect(() => {
-		if (isLoading && !data) return
-		if (data.length > 0) {
-			setProjects({
-				projects: data.map(project => {
-					const newProject: IProject = {
-						id: project.id,
-						name: project.name,
-						description: project.description,
-						owner: project.creator.firstName,
-						members: [],
-						desks: [],
-					}
-					return newProject
-				}),
-			})
-		}
-	}, [data, isLoading])
+  useEffect(() => {
+    if (isLoading && !data) return;
 
-	if (isLoading) return <Loader />
+    // @ts-ignore
+    if (data?.length > 0) {
+      setProjects({
+        // @ts-ignore
+        projects: data.map((project) => {
+          const newProject: IProject = {
+            id: project.id,
+            name: project.name,
+            description: project.description,
+            owner: project.creator.firstName,
+            members: [],
+            desks: [],
+          };
+          return newProject;
+        }),
+      });
+    }
+  }, [data, isLoading]);
 
-	return (
-		<div className='flex bg-muted/40'>
-			<div className='flex items-start justify-start pl-3 pt-3 lg:hidden'>
-				<SidebarSheet />
-			</div>
+  if (isLoading) return <Loader />;
 
-			<div className='hidden lg:flex'>
-				<Sidebar />
-			</div>
+  return (
+    <div className="flex bg-muted/40">
+      <div className="flex items-start justify-start pl-3 pt-3 lg:hidden">
+        <SidebarSheet />
+      </div>
 
-			<div className='w-full lg:ml-[260px]'>
-				<Outlet />
-			</div>
-		</div>
-	)
-}
+      <div className="hidden lg:flex">
+        <Sidebar />
+      </div>
 
-export default Main
+      <div className="w-full lg:ml-[260px]">
+        <Outlet />
+      </div>
+    </div>
+  );
+};
+
+export default Main;

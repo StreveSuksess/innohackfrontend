@@ -15,10 +15,13 @@ export interface ITask {
 
 export type TDesk = {
   name: string;
+  projects: IProject[];
   id: string;
 };
 
 export type TMember = {
   id: string;
-  role: "Reader" | "Redactor" | "Owner";
+  role: string;
+  name: string;
+  email: string;
 };

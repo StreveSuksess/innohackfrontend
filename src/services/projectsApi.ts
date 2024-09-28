@@ -1,3 +1,4 @@
+import { ITask } from "@/types/projectTypes.ts";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 interface Creator {
@@ -18,10 +19,31 @@ interface IProjectResponse {
   creator: Creator;
 }
 
+interface IProjectFullResponse {
+  id: string;
+  name: string;
+  description: string;
+  creator: Creator;
+  desks: Desk[];
+  members: ProjectMember[];
+}
+
+interface ProjectMember {
+  id: string;
+  user: Creator;
+  project: Omit<IProjectFullResponse, "members" | "desks">;
+  role: string;
+}
+
+interface Desk {
+  id: string;
+  tasks: ITask[];
+}
+
 const projectsApi = createApi({
   reducerPath: "projectsApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_API_URL + "/me",
+    baseUrl: import.meta.env.VITE_API_URL,
     prepareHeaders: (headers) => {
       const cookie = document.cookie
         .split("; ")
@@ -39,13 +61,13 @@ const projectsApi = createApi({
   endpoints: (builder) => ({
     getProjects: builder.query<{ data: IProjectResponse[] }, any>({
       query: () => ({
-        url: "/project",
+        url: "/me/project",
         method: "GET",
       }),
     }),
     addProject: builder.mutation<any, any>({
       query: (body: { name: string; description: string }) => ({
-        url: "/project",
+        url: "/me/project",
         method: "POST",
         body: body,
       }),
@@ -56,16 +78,22 @@ const projectsApi = createApi({
         description: string;
         project_id: string;
       }) => ({
-        url: "/project",
+        url: "/me/project",
         method: "PUT",
         body: body,
       }),
     }),
     deleteProject: builder.mutation<any, any>({
       query: (body: { project_id: string }) => ({
-        url: "/project",
+        url: "/me/project",
         method: "PUT",
         body: body,
+      }),
+    }),
+    getProject: builder.query<IProjectFullResponse, any>({
+      query: (body: { projectId: string }) => ({
+        url: `/project/${body.projectId}`,
+        method: "GET",
       }),
     }),
   }),
@@ -76,5 +104,6 @@ export const {
   useAddProjectMutation,
   useEditProjectMutation,
   useDeleteProjectMutation,
+  useGetProjectQuery,
 } = projectsApi;
 export default projectsApi;
