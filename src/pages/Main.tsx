@@ -13,20 +13,22 @@ const Main = () => {
   const { setProjects } = useActions();
 
   useEffect(() => {
-    if (isLoading || !data) return;
-    setProjects({
-      projects: data.data.map((project) => {
-        const newProject: IProject = {
-          id: project.id,
-          name: project.name,
-          description: project.description,
-          owner: project.creator.firstName,
-          members: [],
-          desks: [],
-        };
-        return newProject;
-      }),
-    });
+    if (isLoading && !data) return;
+    if (data.length > 0) {
+      setProjects({
+        projects: data.map((project) => {
+          const newProject: IProject = {
+            id: project.id,
+            name: project.name,
+            description: project.description,
+            owner: project.creator.firstName,
+            members: [],
+            desks: [],
+          };
+          return newProject;
+        }),
+      });
+    }
   }, [data, isLoading]);
 
   if (isLoading) return <Loader />;
