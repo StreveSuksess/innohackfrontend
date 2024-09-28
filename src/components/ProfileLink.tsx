@@ -26,7 +26,7 @@ const ProfileLink = () => {
 					<div className='flex justify-start items-start'>
 						<Avatar className='mr-3 rounded-full'>
 							<AvatarImage
-								src='https://via.placeholder.com/40'
+								src='/avatar.jpg'
 								alt='User'
 								className='rounded-full'
 							/>
