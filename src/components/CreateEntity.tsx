@@ -23,7 +23,7 @@ const CreateEntity = ({
 				{title} name
 			</Label>
 
-			<Input id={title} placeholder={`${title} ${isName && 'name'}`} />
+			<Input id={title} placeholder={`${title} ${isName ? 'name' : ''}`} />
 
 			{children}
 		</Modal>
