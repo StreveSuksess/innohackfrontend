@@ -1,9 +1,25 @@
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
-import { UserAuthForm } from "@/components/ui/user-auth-form"
-import {Link} from "react-router-dom";
+import { buttonVariants } from "@/components/ui/button";
+import { UserAuthForm } from "@/components/ui/user-auth-form";
+import { toast } from "@/hooks/use-toast.ts";
+import { cn } from "@/lib/utils";
+import { useRegistrationMutation } from "@/services/authApi.ts";
+import { Link } from "react-router-dom";
+
 
 export const SignUpPage = () => {
+  const [registration, { isLoading }] = useRegistrationMutation();
+  const onSubmit = async (data: { email: string }) => {
+    try {
+      await registration(data.email);
+      toast({
+        title: "Check your email!",
+        description: "Find your password on your email",
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <>
       <div className="md:hidden">
@@ -70,10 +86,10 @@ export const SignUpPage = () => {
                 Enter your email below to create your account
               </p>
             </div>
-            <UserAuthForm />
+            <UserAuthForm onSubmit={onSubmit} isLoading={isLoading} />
           </div>
         </div>
       </div>
     </>
-  )
-}
+  );
+};
