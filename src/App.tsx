@@ -3,6 +3,7 @@ import Main from './pages/Main'
 import { AuthenticationPage } from '@/pages/AuthentificationPage.tsx'
 import { SignUpPage } from '@/pages/SignUp.tsx'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import {Tasks} from "@/pages/Tasks.tsx";
 
 const router = createBrowserRouter([
 	{
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
 	{
 		path: '/signup',
 		element: <SignUpPage />,
+	},
+	{
+		path: '/tasks',
+		element: <Tasks />,
 	},
 ])
 
