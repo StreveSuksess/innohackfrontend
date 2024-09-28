@@ -21,7 +21,7 @@ const userApi = createApi({
   endpoints: (builder) => ({
     getUserInfo: builder.query<any, any>({
       query: () => ({
-        url: "/me",
+        url: "/me/",
         method: "GET",
       }),
     }),
@@ -53,5 +53,9 @@ const userApi = createApi({
   }),
 });
 
-export const {} = userApi;
+export const {
+  useChangePasswordMutation,
+  useUpdateProfileMutation,
+  useGetUserInfoQuery,
+} = userApi;
 export default userApi;
