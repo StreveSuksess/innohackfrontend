@@ -1,3 +1,4 @@
+import CreateEntity from './CreateEntity'
 import ProfileLink from './ProfileLink'
 import {
 	Squares2X2Icon,
@@ -63,6 +64,12 @@ const Sidebar = () => {
 									{desk.name}
 								</a>
 							))}
+
+							<CreateEntity
+								title='Create a desk'
+								description='Create a new desk'
+								className='bg-white text-black flex justify-center items-center hover:bg-white'
+							/>
 						</nav>
 					</ScrollArea>
 				</div>
@@ -84,6 +91,12 @@ const Sidebar = () => {
 									{project.name}
 								</a>
 							))}
+
+							<CreateEntity
+								title='Create a project'
+								description='Create a new project'
+								className='bg-white text-black flex justify-center items-center hover:bg-white'
+							/>
 						</nav>
 					</ScrollArea>
 				</div>
