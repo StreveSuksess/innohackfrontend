@@ -1,10 +1,15 @@
 import Sidebar from '@/components/Sidebar'
+import { Outlet } from 'react-router-dom'
 
 const Main = () => {
 	return (
-		<main className='px-2 py-2 bg-background'>
+		<div className='flex bg-muted/40'>
 			<Sidebar />
-		</main>
+
+			<div>
+				<Outlet />
+			</div>
+		</div>
 	)
 }
 

@@ -27,7 +27,7 @@ const Sidebar = () => {
 	}
 
 	return (
-		<div className='fixed flex flex-col h-[calc(100vh-16px)] w-64 bg-zinc-900 text-white rounded-xl'>
+		<div className='fixed left-2 top-2 flex flex-col h-[calc(100vh-16px)] w-64 bg-zinc-900 text-white rounded-xl'>
 			<div className='flex items-center justify-between px-6 py-6'>
 				<h1 className='text-2xl font-bold'>
 					{showProjects ? 'My Project' : 'Projects'}
