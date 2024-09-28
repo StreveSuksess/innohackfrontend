@@ -1,5 +1,16 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+interface User {
+  id: string;
+  email: string;
+  password: string;
+  avatarURL: string | null;
+  firstName: string | null;
+  lastName: string | null;
+  birthDate: string | null;
+  lastPasswordChange: number;
+}
+
 const userApi = createApi({
   reducerPath: "userApi",
   baseQuery: fetchBaseQuery({
@@ -19,7 +30,7 @@ const userApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getUserInfo: builder.query<any, any>({
+    getUserInfo: builder.query<User, any>({
       query: () => ({
         url: "/me/",
         method: "GET",
@@ -41,8 +52,8 @@ const userApi = createApi({
         lastName: string;
         dateOfBirth: string;
       }) => ({
-        url: "/me/update-profile",
-        method: "POST",
+        url: "/me/change-data",
+        method: "PUT",
         body: {
           first_name: body.firstName,
           last_name: body.lastName,
