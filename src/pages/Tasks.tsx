@@ -302,6 +302,16 @@ export const Tasks: React.FC = () => {
 												>
 													Failed
 												</DropdownMenuCheckboxItem>
+												<DropdownMenuCheckboxItem
+													checked={selectedFilters.status.includes(
+														'Not started'
+													)}
+													onCheckedChange={(checked: boolean) =>
+														handleStatusFilterChange('Not started', checked)
+													}
+												>
+													Not started
+												</DropdownMenuCheckboxItem>
 											</DropdownMenuContent>
 										</DropdownMenu>
 

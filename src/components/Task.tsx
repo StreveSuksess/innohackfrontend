@@ -72,7 +72,6 @@ export const Task: React.FC<TaskProps> = ({ task, updateTask, deleteTask }) => {
 
 				{!isEditingTask && (
 					<button onClick={() => setIsEditingTask(true)}>
-						{/* Edit Icon SVG */}
 						<svg
 							width='20'
 							height='20'
@@ -99,13 +98,13 @@ export const Task: React.FC<TaskProps> = ({ task, updateTask, deleteTask }) => {
 					<ToggleGroupItem value='Completed'>Completed</ToggleGroupItem>
 					<ToggleGroupItem value='In process'>In process</ToggleGroupItem>
 					<ToggleGroupItem value='Failed'>Failed</ToggleGroupItem>
+					<ToggleGroupItem value='Not started'>Not started</ToggleGroupItem>
 				</ToggleGroup>
 			</TableCell>
 			<TableCell className='hidden md:table-cell'>{task.creator}</TableCell>
 			<TableCell className='hidden md:table-cell'>{task.createdAt}</TableCell>
 			<TableCell>
 				<button onClick={() => deleteTask(task.id)}>
-					{/* Delete Icon SVG */}
 					<svg
 						xmlns='http://www.w3.org/2000/svg'
 						width='24'
