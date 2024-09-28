@@ -219,9 +219,6 @@ export const Tasks = () => {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead className="hidden w-[100px] sm:table-cell">
-                          <span className="sr-only">img</span>
-                        </TableHead>
                         <TableHead>Name</TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead className="hidden md:table-cell">
