@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
+	DropdownMenuItem,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from './ui/dropdown-menu'
@@ -12,7 +13,7 @@ import {
 const ProfileLink = () => {
 	return (
 		<DropdownMenu>
-			<DropdownMenuTrigger className='w-full'>
+			<DropdownMenuTrigger className='w-full outline-none'>
 				<div className='px-3 py-2'>
 					<div className='flex justify-start items-start'>
 						<Avatar className='mr-3 rounded-full'>
@@ -35,8 +36,9 @@ const ProfileLink = () => {
 			<DropdownMenuContent className='w-[180px] bg-zinc-900'>
 				<AvatarChanger />
 				<PasswordChanger />
-				<DropdownMenuSeparator />
 				<Settings />
+				<DropdownMenuSeparator />
+				<DropdownMenuItem className='cursor-pointer'>Logout</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>
 	)
