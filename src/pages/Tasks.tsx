@@ -57,7 +57,7 @@ export const Tasks = () => {
   const deskName = "Desk Name";
 
   return (
-    <div className="flex min-h-screen w-full bg-muted/40">
+    <div className="flex min-h-screen w-full">
       <div className="flex flex-col sm:gap-4 sm:py-4 w-full">
         <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
           <Sheet>
@@ -168,7 +168,7 @@ export const Tasks = () => {
             <div className="flex items-center">
               <TabsList>
                 <TabsTrigger value="all">All</TabsTrigger>
-                <TabsTrigger value="hierarchy">Hierarchy</TabsTrigger>
+                <TabsTrigger value="hierarchy">History</TabsTrigger>
                 <TabsTrigger value="members">Project members</TabsTrigger>
               </TabsList>
               <div className="ml-auto flex items-center gap-2">
