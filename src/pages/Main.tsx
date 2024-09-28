@@ -13,12 +13,7 @@ const Main = () => {
 				<Sidebar />
 			</div>
 
-			<div
-				style={{
-					marginLeft: '260px',
-				}}
-				className='w-full'
-			>
+			<div className='w-full lg:ml-[260px]'>
 				<Outlet />
 			</div>
 		</div>

@@ -1,5 +1,6 @@
 import CreateEntity from './CreateEntity'
 import ProfileLink from './ProfileLink'
+import { Input } from './ui/input'
 import {
 	Squares2X2Icon,
 	ChevronRightIcon,
@@ -96,7 +97,9 @@ const Sidebar = () => {
 								title='Create a project'
 								description='Create a new project'
 								className='bg-white text-black flex justify-center items-center hover:bg-white'
-							/>
+							>
+								<Input placeholder='Description' id='description' />
+							</CreateEntity>
 						</nav>
 					</ScrollArea>
 				</div>

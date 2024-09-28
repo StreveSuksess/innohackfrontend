@@ -66,7 +66,7 @@ export function UserAuthForm({
 						{isLoading && (
 							<Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
 						)}
-						Log In
+						{login ? 'Login' : 'Sign up'}
 					</Button>
 				</div>
 			</form>
