@@ -24,7 +24,7 @@ export const SignUpPage = () => {
 	return (
 		<>
 			<div className='md:hidden'></div>
-			<div className='container relative hidden h-[100vh] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0'>
+			<div className='container relative h-[100vh] flex-col items-center justify-center grid max-w-none lg:grid-cols-2 lg:px-0'>
 				<Link
 					to='/login'
 					className={cn(

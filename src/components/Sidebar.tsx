@@ -1,11 +1,7 @@
 import CreateEntity from './CreateEntity'
 import ProfileLink from './ProfileLink'
 import { Input } from './ui/input'
-import {
-	Squares2X2Icon,
-	ChevronRightIcon,
-	ChevronLeftIcon,
-} from '@heroicons/react/24/outline'
+import { Squares2X2Icon, ChevronLeftIcon } from '@heroicons/react/24/outline'
 import { ScrollArea } from '@radix-ui/react-scroll-area'
 import { useState } from 'react'
 
@@ -39,11 +35,7 @@ const Sidebar = () => {
 					onClick={toggleView}
 					className='p-1 rounded-md hover:bg-zinc-800 transition-colors duration-200'
 				>
-					{showProjects ? (
-						<ChevronLeftIcon className='w-6 h-6' />
-					) : (
-						<ChevronRightIcon className='w-6 h-6' />
-					)}
+					{showProjects && <ChevronLeftIcon className='w-6 h-6' />}
 				</button>
 			</div>
 
