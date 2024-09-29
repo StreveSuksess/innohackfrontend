@@ -60,6 +60,25 @@ export const Task: FC<TaskProps> = ({ task, updateTask }) => {
 		setIsEditingTask(false)
 	}
 
+	const editStatus = async (status: string) => {
+		const updatedTask = { ...task, status }
+		await updateTaskFetch({
+			name: updatedTask.name,
+			description: updatedTask.description,
+			status: updatedTask.status,
+			taskId: updatedTask.id,
+		})
+		updateTaskLocal({
+			name: updatedTask.name,
+			taskId: updatedTask.id,
+			// @ts-ignore
+			deskId: deskId,
+			// @ts-ignore
+			projectId: projectId,
+			status: updatedTask.status,
+		})
+	}
+
 	useEffect(() => {
 		const onKeyDown = (e: KeyboardEvent) => {
 			if (e.key === 'Enter') {
@@ -118,11 +137,7 @@ export const Task: FC<TaskProps> = ({ task, updateTask }) => {
 					type='single'
 					value={task.status}
 					onValueChange={(value: string) => {
-						const updatedTask = {
-							...task,
-							status: value as ITask['status'],
-						}
-						updateTask(updatedTask)
+						editStatus(value)
 					}}
 				>
 					<ToggleGroupItem value='COMPLETED'>Completed</ToggleGroupItem>
