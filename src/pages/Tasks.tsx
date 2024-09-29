@@ -1,4 +1,5 @@
 import { DatePickerWithRange } from '@/components/DatePickerWithRange'
+import GaantPage from '@/components/GaantPage'
 import { History } from '@/components/History'
 import { Member } from '@/components/Member'
 import { Task } from '@/components/Task'
@@ -38,11 +39,12 @@ import {
 	TableRow,
 } from '@/components/ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useAppSelector } from '@/hooks/useAppSelector'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { ListFilter, Search } from 'lucide-react'
 import React, { useState, ChangeEvent } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 type VersionType = {
 	versionId: number
@@ -67,8 +69,14 @@ type MemberType = {
 }
 
 export const Tasks: React.FC = () => {
-	const projectName = 'Project Name'
-	const deskName = 'Desk Name'
+	const { projectId, deskId } = useParams()
+
+	const projects = useAppSelector(state => state.projects.projects)
+	const currentProject = projects.find(project => project.id === projectId)
+	const currentDesk = currentProject?.desks.find(desk => desk.id === deskId)
+
+	const projectName = currentProject?.name
+	const deskName = currentDesk?.title
 
 	const [tasks, setTasks] = useState<TaskType[]>([
 		{
@@ -236,6 +244,7 @@ export const Tasks: React.FC = () => {
 								<TabsTrigger value='tasks'>Tasks</TabsTrigger>
 								<TabsTrigger value='history'>History</TabsTrigger>
 								<TabsTrigger value='members'>Project Members</TabsTrigger>
+								<TabsTrigger value='gaant'>Gaant Chart</TabsTrigger>
 							</TabsList>
 						</div>
 						<TabsContent value='tasks'>
@@ -437,6 +446,18 @@ export const Tasks: React.FC = () => {
 											</form>
 										</DialogContent>
 									</Dialog>
+								</CardContent>
+							</Card>
+						</TabsContent>
+
+						<TabsContent value='gaant'>
+							<Card x-chunk='dashboard-01-chunk-5'>
+								<CardHeader>
+									<CardTitle>Gaant Chart</CardTitle>
+								</CardHeader>
+
+								<CardContent className='grid gap-8'>
+									<GaantPage />
 								</CardContent>
 							</Card>
 						</TabsContent>

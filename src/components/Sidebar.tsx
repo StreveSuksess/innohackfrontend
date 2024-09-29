@@ -9,9 +9,9 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
 const Sidebar = () => {
-	const { projectId } = useParams()
+	const { projectId, deskId } = useParams()
 	const navigate = useNavigate()
-	const [showProjects, setShowProjects] = useState(false)
+	const [showProjects, setShowProjects] = useState(deskId ? true : false)
 	const projects = useAppSelector(state => state.projects.projects)
 	const userData = useAppSelector(state => state.user)
 
