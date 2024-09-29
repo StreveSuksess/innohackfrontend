@@ -140,7 +140,7 @@ const projectsApi = createApi({
       }) => ({
         url: `/task/`,
         method: "PUT",
-        body: body,
+        body: { ...body, taskId: body.taskId },
       }),
     }),
     getTask: builder.query<any, any>({
