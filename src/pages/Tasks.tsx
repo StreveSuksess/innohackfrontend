@@ -202,7 +202,7 @@ export const Tasks: React.FC = () => {
 	const addMember = async () => {
 		const token = Cookies.get('Authorization')
 		await axios.post(
-			`${import.meta.env.VITE_API_URL}/project/${currentProject?.id}`,
+			`${import.meta.env.VITE_API_URL}/project/invite/${currentProject?.id}`,
 			{ email },
 			{ headers: { Authorization: token } }
 		)
@@ -424,7 +424,7 @@ export const Tasks: React.FC = () => {
 												</DialogDescription>
 											</DialogHeader>
 
-											<form className='w-full'>
+											<div className='w-full'>
 												<Input
 													placeholder='email'
 													value={email}
@@ -443,7 +443,7 @@ export const Tasks: React.FC = () => {
 														</Button>
 													</DialogClose>
 												</DialogFooter>
-											</form>
+											</div>
 										</DialogContent>
 									</Dialog>
 								</CardContent>
