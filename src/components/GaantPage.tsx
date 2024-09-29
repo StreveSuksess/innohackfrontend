@@ -1,97 +1,19 @@
 import '../Gaant.css'
 import GanttChart from './GaantChart'
+import { useAppSelector } from '@/hooks/useAppSelector'
+import { ITask } from '@/types/projectTypes'
 import React, { useState } from 'react'
+import { useParams } from 'react-router-dom'
 
-interface Task {
-	task: string
-	description: string
-	start: Date
-	end: Date
-	status: number
-}
-
-const tasks = [
-	{
-		task: 'Task 1',
-		description: 'Description 1',
-		start: new Date(2024, 8, 1),
-		end: new Date(2024, 8, 5),
-		status: 1,
-	},
-	{
-		task: 'Task 2',
-		description: 'Description 2',
-		start: new Date(2024, 8, 3),
-		end: new Date(2024, 8, 10),
-		status: 2,
-	},
-	{
-		task: 'Task 3',
-		description: 'Description 3',
-		start: new Date(2024, 8, 7),
-		end: new Date(2024, 8, 12),
-		status: 3,
-	},
-	{
-		task: 'Task 4',
-		description: 'Description 4',
-		start: new Date(2024, 8, 7),
-		end: new Date(2024, 8, 12),
-		status: 4,
-	},
-	{
-		task: 'Task 5',
-		description: 'Description 5',
-		start: new Date(2024, 8, 7),
-		end: new Date(2024, 8, 12),
-		status: 1,
-	},
-	{
-		task: 'Task 6',
-		description: 'Description 6',
-		start: new Date(2024, 8, 7),
-		end: new Date(2024, 8, 12),
-		status: 2,
-	},
-	{
-		task: 'Task 7',
-		description: 'Description 7',
-		start: new Date(2024, 8, 7),
-		end: new Date(2024, 8, 12),
-		status: 3,
-	},
-	{
-		task: 'Task 8',
-		description: 'Description 7',
-		start: new Date(2024, 8, 7),
-		end: new Date(2024, 8, 12),
-		status: 3,
-	},
-	{
-		task: 'Task 9',
-		description: 'Description 7',
-		start: new Date(2024, 8, 7),
-		end: new Date(2024, 8, 12),
-		status: 3,
-	},
-	{
-		task: 'Task 10',
-		description: 'Description 7',
-		start: new Date(2024, 8, 7),
-		end: new Date(2024, 8, 12),
-		status: 3,
-	},
-]
-
-const getStatusString = (status: number) => {
+const getStatusString = (status: string) => {
 	switch (status) {
-		case 1:
+		case 'NOT_STARTED':
 			return 'Not started'
-		case 2:
+		case 'IN_PROCESS':
 			return 'In process'
-		case 3:
+		case 'COMPLETED':
 			return 'Completed'
-		case 4:
+		case 'FAILED':
 			return 'Failed'
 		default:
 			return 'Unknown'
@@ -99,7 +21,20 @@ const getStatusString = (status: number) => {
 }
 
 const GaantPage: React.FC = () => {
-	const [selectedTask, setSelectedTask] = useState<Task | null>(null)
+	const { projectId, deskId } = useParams()
+
+	const tasks = useAppSelector(state => {
+		const projectIndex = state.projects.projects.findIndex(
+			project => project.id === projectId
+		)
+		const deskIndex = state.projects?.projects[projectIndex]?.desks.findIndex(
+			desk => desk.id === deskId
+		)
+
+		return state.projects.projects[projectIndex]?.desks[deskIndex]?.tasks ?? []
+	})
+
+	const [selectedTask, setSelectedTask] = useState<ITask | null>(null)
 	const taskHeight = 50
 	const taskGap = 10
 	const tableRowHeight = 50
@@ -121,7 +56,7 @@ const GaantPage: React.FC = () => {
 				<tbody>
 					{tasks.map((task, index) => (
 						<tr key={index} onClick={() => setSelectedTask(task)}>
-							<td>{task.task}</td>
+							<td>{task.name}</td>
 							<td>{getStatusString(task.status)}</td>
 							<td>
 								<button onClick={() => setSelectedTask(task)}>
@@ -139,21 +74,21 @@ const GaantPage: React.FC = () => {
 			>
 				{selectedTask && (
 					<>
-						<h1 className={'sidebar__title'}>Детали таска</h1>
+						<h1 className={'sidebar__title'}>Details</h1>
 						<p>
-							<strong>Название:</strong> {selectedTask.task}
+							<strong>Name:</strong> {selectedTask.name}
 						</p>
 						<p>
-							<strong>Описание:</strong> {selectedTask.description}
+							<strong>Description:</strong> {selectedTask.description}
 						</p>
 						<p>
-							<strong>Начало:</strong> {selectedTask.start.toLocaleString()}
+							<strong>Start:</strong> {selectedTask.start?.toLocaleString()}
 						</p>
 						<p>
-							<strong>Конец:</strong> {selectedTask.end.toLocaleString()}
+							<strong>End:</strong> {selectedTask.end?.toLocaleString()}
 						</p>
 						<p>
-							<strong>Статус:</strong> {getStatusString(selectedTask.status)}
+							<strong>Status:</strong> {getStatusString(selectedTask.status)}
 						</p>
 						<button
 							className='close-button'

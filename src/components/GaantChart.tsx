@@ -1,3 +1,4 @@
+import { ITask } from '@/types/projectTypes'
 import 'bootstrap-icons/font/bootstrap-icons.scss'
 import * as d3 from 'd3'
 import React, { useEffect, useRef } from 'react'
@@ -10,9 +11,9 @@ interface Task {
 }
 
 interface GanttChartProps {
-	tasks: Task[]
+	tasks: ITask[]
 	setChartHeight: React.Dispatch<React.SetStateAction<number>>
-	setSelectedTask: (task: Task | null) => void
+	setSelectedTask: (task: ITask | null) => void
 }
 
 const GanttChart: React.FC<GanttChartProps> = ({
@@ -64,7 +65,7 @@ const GanttChart: React.FC<GanttChartProps> = ({
 
 		const yScale = d3
 			.scaleBand()
-			.domain(tasks.map(d => d.task))
+			.domain(tasks.map(d => d.name))
 			.range([0, height])
 			.padding(0.1)
 
@@ -88,15 +89,15 @@ const GanttChart: React.FC<GanttChartProps> = ({
 			.attr('stroke', '#ffffff')
 			.attr('stroke-width', 1)
 
-		const getColor = (status: number) => {
+		const getColor = (status: string) => {
 			switch (status) {
-				case 0:
+				case 'NOT_STARTED':
 					return '#f1faee'
-				case 1:
+				case 'IN_PROCESS':
 					return '#ee964b'
-				case 2:
+				case 'COMPLETED':
 					return '#80ed99'
-				case 3:
+				case 'FAILED':
 					return '#e63946'
 				default:
 					return '#f1faee'
@@ -109,7 +110,7 @@ const GanttChart: React.FC<GanttChartProps> = ({
 			.enter()
 			.append('rect')
 			.attr('x', d => xScale(d.start))
-			.attr('y', d => yScale(d.task) as number)
+			.attr('y', d => yScale(d.name) as number)
 			.attr('width', d => xScale(d.end) - xScale(d.start))
 			.attr('height', yScale.bandwidth() * 0.8)
 			.attr('rx', 5)
@@ -127,9 +128,9 @@ const GanttChart: React.FC<GanttChartProps> = ({
 			.enter()
 			.append('text')
 			.attr('x', d => xScale(d.start) + 5)
-			.attr('y', d => (yScale(d.task) as number) + yScale.bandwidth() / 2)
+			.attr('y', d => (yScale(d.name) as number) + yScale.bandwidth() / 2)
 			.attr('text-anchor', 'start')
-			.text(d => d.task)
+			.text(d => d.name)
 			.attr('fill', 'black')
 			.attr('font-size', '17px')
 			.attr('font-weight', '600')
