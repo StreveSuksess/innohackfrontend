@@ -42,11 +42,12 @@ export const Task: FC<TaskProps> = ({ task, updateTask }) => {
 
   const editTask = async () => {
     const updatedTask = { ...task, name: editedTaskName };
+    console.log(editedTaskName);
     await updateTaskFetch({
       name: updatedTask.name,
       description: updatedTask.description,
       status: updatedTask.status,
-      id: updatedTask.id,
+      taskId: updatedTask.id,
     });
     updateTaskLocal({
       name: updatedTask.name,
