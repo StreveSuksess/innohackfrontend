@@ -31,28 +31,22 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import {
-	Table,
-	TableBody,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from '@/components/ui/table'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { useActions } from '@/hooks/useActions.ts'
-import { useAppSelector } from '@/hooks/useAppSelector.ts'
-import { useAddTaskMutation, useGetTaskQuery } from '@/services/projectsApi.ts'
-import axios from 'axios'
-import Cookies from 'js-cookie'
-import { ListFilter, Search } from 'lucide-react'
-import { ChangeEvent, FC, useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-
-type MemberType = {
-	id: number
-	name: string
-	role: string
-}
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useActions } from "@/hooks/useActions.ts";
+import { useAppSelector } from "@/hooks/useAppSelector.ts";
+import { useAddTaskMutation, useGetTaskQuery } from "@/services/projectsApi.ts";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { ListFilter, Search } from "lucide-react";
+import { ChangeEvent, FC, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { Link, useParams } from "react-router-dom";
 
 export const Tasks: FC = () => {
 	const { deskId, projectId } = useParams()
@@ -63,6 +57,14 @@ export const Tasks: FC = () => {
 		const deskIndex = state.projects?.projects[projectIndex]?.desks.findIndex(
 			desk => desk.id === deskId
 		)
+  const { deskId, projectId } = useParams();
+  const tasks = useAppSelector((state) => {
+    const projectIndex = state.projects.projects.findIndex(
+      (project) => project.id === projectId
+    );
+    const deskIndex = state.projects?.projects[projectIndex]?.desks.findIndex(
+      (desk) => desk.id === deskId
+    );
 
 		return state.projects.projects[projectIndex]?.desks[deskIndex]?.tasks ?? []
 	})
@@ -77,18 +79,18 @@ export const Tasks: FC = () => {
 			?.desks.find(desk => desk.id === deskId)?.name ?? 'Desk'
 	const [searchTerm, setSearchTerm] = useState<string>('')
 
-	const [selectedFilters, setSelectedFilters] = useState<{
-		status: string[]
-	}>({
-		status: [],
-	})
+  const [selectedFilters, setSelectedFilters] = useState<{
+    status: string[];
+  }>({
+    status: [],
+  });
 
-	const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null)
+  const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
 
-	const [members, setMembers] = useState<MemberType[]>([
-		{ id: 1, name: 'John Doe', role: 'Developer' },
-		{ id: 2, name: 'Jane Smith', role: 'Designer' },
-	])
+  const members =
+    useAppSelector((state) => state.projects.projects).find(
+      (project) => project.id === projectId
+    )?.members ?? [];
 
 	const handleStatusFilterChange = (status: string, checked: boolean) => {
 		setSelectedFilters(prevFilters => {
@@ -139,17 +141,16 @@ export const Tasks: FC = () => {
 	const { data: taskData, isLoading } = useGetTaskQuery(deskId)
 	const [dataTaskFrom, setData] = useState({ from: null, to: null })
 
-	const onSubmit = async (data: any) => {
-		console.log(dataTaskFrom)
-		try {
-			const response = await addTaskFetch({
-				name: data.name,
-				description: 'description',
-				deskId: deskId,
-				workerEmail: userEmail,
-				start: dataTaskFrom.from,
-				end: dataTaskFrom.to,
-			})
+  const onSubmit = async (data: any) => {
+    try {
+      const response = await addTaskFetch({
+        name: data.name,
+        description: "description",
+        deskId: deskId,
+        workerEmail: userEmail,
+        start: dataTaskFrom.from,
+        end: dataTaskFrom.to,
+      });
 
 			addTask({
 				name: response.data.name,
@@ -370,14 +371,10 @@ export const Tasks: FC = () => {
 									<CardTitle>Project Members</CardTitle>
 								</CardHeader>
 
-								<CardContent className='grid gap-8'>
-									{members.map(member => (
-										<Member
-											key={member.id}
-											member={member}
-											removeMember={removeMember}
-										/>
-									))}
+                <CardContent className="grid gap-8">
+                  {members.map((member) => (
+                    <Member key={member.id} member={member} />
+                  ))}
 
 									<Dialog>
 										<DialogTrigger>
