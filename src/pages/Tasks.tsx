@@ -45,7 +45,7 @@ import Cookies from "js-cookie";
 import { ListFilter, Search } from "lucide-react";
 import { ChangeEvent, FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 type MemberType = {
   id: number;
@@ -55,6 +55,7 @@ type MemberType = {
 
 export const Tasks: FC = () => {
   const { deskId, projectId } = useParams();
+  const navigate = useNavigate();
   const tasks = useAppSelector((state) => {
     const projectIndex = state.projects.projects.findIndex(
       (project) => project.id === projectId

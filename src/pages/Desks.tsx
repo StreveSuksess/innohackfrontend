@@ -31,5 +31,5 @@ export const Desks = () => {
     }
   }, [isLoading]);
 
-  return <Outlet />;
+  return data && <Outlet />;
 };
