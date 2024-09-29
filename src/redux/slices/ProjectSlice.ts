@@ -56,11 +56,12 @@ export const ProjectsSLice = createSlice({
       const deskIndex = state.projects[projectIndex].desks.findIndex(
         (desk) => desk.id === action.payload.deskId
       );
-      const taskIndex = state.projects[projectIndex].desks[
-        deskIndex
-      ].tasks.findIndex((task) => task.id === action.payload.taskId);
 
-      state.projects[projectIndex].desks[deskIndex].tasks.splice(taskIndex, 1);
+      state.projects[projectIndex].desks[deskIndex].tasks = state.projects[
+        projectIndex
+      ].desks[deskIndex].tasks.filter(
+        (task) => task.id !== action.payload.taskId
+      );
     },
     updateTask: (
       state,
@@ -198,7 +199,7 @@ export const ProjectsSLice = createSlice({
       const projectIndex = state.projects.findIndex(
         (project) => project.id === action.payload.projectId
       );
-      const deskIndex = state.projects[projectIndex].desks.findIndex(
+      const deskIndex = state.projects[projectIndex]?.desks.findIndex(
         (desk) => desk.id === action.payload.deskId
       );
 

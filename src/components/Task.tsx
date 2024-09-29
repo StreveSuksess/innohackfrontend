@@ -8,7 +8,13 @@ import {
 } from "@/services/projectsApi.ts";
 import { ITask } from "@/types/projectTypes.ts";
 import { ToggleGroup } from "@radix-ui/react-toggle-group";
-import React, { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
+import React, {
+  ChangeEvent,
+  FC,
+  KeyboardEvent,
+  useEffect,
+  useState,
+} from "react";
 import { useParams } from "react-router-dom";
 
 
@@ -25,7 +31,7 @@ type TaskProps = {
   deleteTask: (taskId: number) => void;
 };
 
-export const Task: React.FC<TaskProps> = ({ task, updateTask }) => {
+export const Task: FC<TaskProps> = ({ task, updateTask }) => {
   const [isEditingTask, setIsEditingTask] = useState<boolean>(false);
   const [editedTaskName, setEditedTaskName] = useState<string>(task.name);
   const [deleteTaskFetch, {}] = useDeleteTaskMutation();
@@ -130,7 +136,7 @@ export const Task: React.FC<TaskProps> = ({ task, updateTask }) => {
       <TableCell>
         <button
           onClick={async () => {
-            await deleteTaskFetch(task.id);
+            await deleteTaskFetch({ taskId: task.id });
             deleteTaskLocal({
               //@ts-ignore
               projectId: projectId,

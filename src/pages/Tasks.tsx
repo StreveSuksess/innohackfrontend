@@ -1,5 +1,4 @@
 import { DatePickerWithRange } from "@/components/DatePickerWithRange";
-import { History } from "@/components/History";
 import { Member } from "@/components/Member";
 import { Task } from "@/components/Task";
 import {
@@ -71,42 +70,26 @@ type MemberType = {
 };
 
 export const Tasks: FC = () => {
-  const projectName = "Project Name";
-  const deskName = "Desk Name";
+  const { deskId, projectId } = useParams();
+  const tasks = useAppSelector((state) => {
+    const projectIndex = state.projects.projects.findIndex(
+      (project) => project.id === projectId
+    );
+    const deskIndex = state.projects?.projects[projectIndex]?.desks.findIndex(
+      (desk) => desk.id === deskId
+    );
 
-  const [tasks, setTasks] = useState<TaskType[]>([
-    {
-      id: 1,
-      name: "Laser Lemonade Machine",
-      status: "In process",
-      creator: "JJJ",
-      createdAt: "2023-07-12 10:42 AM",
-      versions: [
-        {
-          versionId: 1,
-          name: "Laser Lemonade Machine",
-          status: "In process",
-          timestamp: "2023-07-12 10:42 AM",
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: "Task 2",
-      status: "Completed",
-      creator: "AAA",
-      createdAt: "2023-07-13 11:00 AM",
-      versions: [
-        {
-          versionId: 1,
-          name: "Task 2",
-          status: "Completed",
-          timestamp: "2023-07-13 11:00 AM",
-        },
-      ],
-    },
-  ]);
+    return state.projects.projects[projectIndex]?.desks[deskIndex]?.tasks ?? [];
+  });
 
+  const projectName =
+    useAppSelector((state) => state.projects.projects).find(
+      (project) => project.id === projectId
+    )?.name ?? "Project";
+  const deskName =
+    useAppSelector((state) => state.projects.projects)
+      .find((project) => project.id === projectId)
+      ?.desks.find((desk) => desk.id === deskId)?.name ?? "Desk";
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   const [selectedFilters, setSelectedFilters] = useState<{
@@ -133,32 +116,32 @@ export const Tasks: FC = () => {
       };
     });
   };
+  //
+  // const updateTask = (updatedTask: TaskType) => {
+  //   setTasks((prevTasks) =>
+  //     prevTasks.map((task) => {
+  //       if (task.id === updatedTask.id) {
+  //         return {
+  //           ...updatedTask,
+  //           versions: [
+  //             ...task.versions,
+  //             {
+  //               versionId: task.versions.length + 1,
+  //               name: updatedTask.name,
+  //               status: updatedTask.status,
+  //               timestamp: new Date().toLocaleString(),
+  //             },
+  //           ],
+  //         };
+  //       }
+  //       return task;
+  //     })
+  //   );
+  // };
 
-  const updateTask = (updatedTask: TaskType) => {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) => {
-        if (task.id === updatedTask.id) {
-          return {
-            ...updatedTask,
-            versions: [
-              ...task.versions,
-              {
-                versionId: task.versions.length + 1,
-                name: updatedTask.name,
-                status: updatedTask.status,
-                timestamp: new Date().toLocaleString(),
-              },
-            ],
-          };
-        }
-        return task;
-      })
-    );
-  };
-
-  const deleteTask = (taskId: number) => {
-    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
-  };
+  // const deleteTask = (taskId: number) => {
+  //   setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+  // };
 
   const filteredTasks = tasks.filter((task) => {
     const matchesSearchTerm = task.name
@@ -169,30 +152,30 @@ export const Tasks: FC = () => {
       selectedFilters.status.includes(task.status);
     return matchesSearchTerm && matchesStatusFilter;
   });
-
-  const rollbackTask = (taskId: number, version: VersionType) => {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) => {
-        if (task.id === taskId) {
-          return {
-            ...task,
-            name: version.name,
-            status: version.status,
-            versions: [
-              ...task.versions,
-              {
-                versionId: task.versions.length + 1,
-                name: task.name,
-                status: task.status,
-                timestamp: new Date().toLocaleString(),
-              },
-            ],
-          };
-        }
-        return task;
-      })
-    );
-  };
+  //
+  // const rollbackTask = (taskId: number, version: VersionType) => {
+  //   setTasks((prevTasks) =>
+  //     prevTasks.map((task) => {
+  //       if (task.id === taskId) {
+  //         return {
+  //           ...task,
+  //           name: version.name,
+  //           status: version.status,
+  //           versions: [
+  //             ...task.versions,
+  //             {
+  //               versionId: task.versions.length + 1,
+  //               name: task.name,
+  //               status: task.status,
+  //               timestamp: new Date().toLocaleString(),
+  //             },
+  //           ],
+  //         };
+  //       }
+  //       return task;
+  //     })
+  //   );
+  // };
 
   const [email, setEmail] = useState("");
   const addMember = async () => {
@@ -215,20 +198,9 @@ export const Tasks: FC = () => {
 
   const { register, handleSubmit } = useForm();
   const [addTaskFetch] = useAddTaskMutation();
-  const { addTask } = useActions();
-  const { deskId, projectId } = useParams();
+  const { addTask, setTasks } = useActions();
   // @ts-ignore
   const userEmail = useAppSelector((state) => state.user.email);
-  const tasksx = useAppSelector((state) => {
-    const projectIndex = state.projects.projects.findIndex(
-      (project) => project.id === projectId
-    );
-    const deskIndex = state.projects.projects[projectIndex].desks.findIndex(
-      (desk) => desk.id === deskId
-    );
-
-    return state.projects.projects[projectIndex]?.desks[deskIndex].tasks ?? [];
-  });
   const { data: taskData, isLoading } = useGetTaskQuery(deskId);
 
   const onSubmit = async (data: any) => {
@@ -252,7 +224,11 @@ export const Tasks: FC = () => {
   useEffect(() => {
     console.log(taskData);
     if (isLoading || !taskData) return;
-    setTasks(taskData);
+    setTasks({
+      tasks: taskData,
+      projectId: projectId,
+      deskId: deskId,
+    });
   }, [isLoading]);
 
   return (
@@ -421,8 +397,8 @@ export const Tasks: FC = () => {
                         <Task
                           key={task.id}
                           task={task}
-                          updateTask={updateTask}
-                          deleteTask={deleteTask}
+                          updateTask={() => {}}
+                          deleteTask={() => {}}
                         />
                       ))}
                     </TableBody>
@@ -431,12 +407,12 @@ export const Tasks: FC = () => {
               </Card>
             </TabsContent>
             <TabsContent value="history">
-              <History
-                tasks={tasks}
-                selectedTask={selectedTask}
-                setSelectedTaskId={setSelectedTaskId}
-                rollbackTask={rollbackTask}
-              />
+              {/*<History*/}
+              {/*  tasks={tasks}*/}
+              {/*  selectedTask={selectedTask}*/}
+              {/*  setSelectedTaskId={setSelectedTaskId}*/}
+              {/*  rollbackTask={rollbackTask}*/}
+              {/*/>*/}
             </TabsContent>
 
             <TabsContent value="members">
