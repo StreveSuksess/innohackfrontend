@@ -1,7 +1,7 @@
-import {DatePickerWithRange} from "@/components/DatePickerWithRange";
-import {History} from "@/components/History";
-import {Member} from "@/components/Member";
-import {Task} from "@/components/Task";
+import { DatePickerWithRange } from "@/components/DatePickerWithRange";
+import { History } from "@/components/History";
+import { Member } from "@/components/Member";
+import { Task } from "@/components/Task";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,8 +9,8 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import {Button} from "@/components/ui/button";
-import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
   DialogClose,
@@ -29,18 +29,24 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {Input} from "@/components/ui/input";
-import {Table, TableBody, TableHead, TableHeader, TableRow,} from "@/components/ui/table";
-import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
-import {useActions} from "@/hooks/useActions.ts";
-import {useAppSelector} from "@/hooks/useAppSelector.ts";
-import {useAddTaskMutation} from "@/services/projectsApi.ts";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useActions } from "@/hooks/useActions.ts";
+import { useAppSelector } from "@/hooks/useAppSelector.ts";
+import { useAddTaskMutation, useGetTaskQuery } from "@/services/projectsApi.ts";
 import axios from "axios";
 import Cookies from "js-cookie";
-import {ListFilter, Search} from "lucide-react";
-import {ChangeEvent, FC, useState} from "react";
-import {useForm} from "react-hook-form";
-import {Link, useParams} from "react-router-dom";
+import { ListFilter, Search } from "lucide-react";
+import { ChangeEvent, FC, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { Link, useParams } from "react-router-dom";
 
 type VersionType = {
   versionId: number;
@@ -112,8 +118,8 @@ export const Tasks: FC = () => {
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
 
   const [members, setMembers] = useState<MemberType[]>([
-    {id: 1, name: "John Doe", role: "Developer"},
-    {id: 2, name: "Jane Smith", role: "Designer"},
+    { id: 1, name: "John Doe", role: "Developer" },
+    { id: 2, name: "Jane Smith", role: "Designer" },
   ]);
 
   const handleStatusFilterChange = (status: string, checked: boolean) => {
@@ -193,8 +199,8 @@ export const Tasks: FC = () => {
     const token = Cookies.get("Authorization");
     await axios.post(
       `${import.meta.env.VITE_API_URL}/project/`,
-      {email},
-      {headers: {Authorization: token}}
+      { email },
+      { headers: { Authorization: token } }
     );
     setEmail("");
   };
@@ -207,13 +213,23 @@ export const Tasks: FC = () => {
 
   const selectedTask = tasks.find((task) => task.id === selectedTaskId) || null;
 
-  const {register, handleSubmit} = useForm();
+  const { register, handleSubmit } = useForm();
   const [addTaskFetch] = useAddTaskMutation();
-  const {addTask} = useActions();
-  const {deskId, projectId} = useParams();
+  const { addTask } = useActions();
+  const { deskId, projectId } = useParams();
   // @ts-ignore
   const userEmail = useAppSelector((state) => state.user.email);
-  const tasks = useAppSelector((state) => state.projects.projects[projectId].desks[deskId].tasks);
+  const tasksx = useAppSelector((state) => {
+    const projectIndex = state.projects.projects.findIndex(
+      (project) => project.id === projectId
+    );
+    const deskIndex = state.projects.projects[projectIndex].desks.findIndex(
+      (desk) => desk.id === deskId
+    );
+
+    return state.projects.projects[projectIndex]?.desks[deskIndex].tasks ?? [];
+  });
+  const { data: taskData, isLoading } = useGetTaskQuery(deskId);
 
   const onSubmit = async (data: any) => {
     const response = await addTaskFetch({
@@ -233,6 +249,12 @@ export const Tasks: FC = () => {
     });
   };
 
+  useEffect(() => {
+    console.log(taskData);
+    if (isLoading || !taskData) return;
+    setTasks(taskData);
+  }, [isLoading]);
+
   return (
     <div className="flex min-h-screen w-full">
       <div className="flex flex-col sm:gap-4 sm:py-4 w-full">
@@ -244,7 +266,7 @@ export const Tasks: FC = () => {
                   <Link to="#">{projectName}</Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
-              <BreadcrumbSeparator/>
+              <BreadcrumbSeparator />
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
                   <Link to="#">{deskName}</Link>
@@ -269,7 +291,7 @@ export const Tasks: FC = () => {
 
                   <div className="ml-auto flex items-center gap-2">
                     <div className="relative ml-auto flex-1 md:grow-0">
-                      <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"/>
+                      <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                       <Input
                         type="search"
                         placeholder="Search..."
@@ -287,7 +309,7 @@ export const Tasks: FC = () => {
                           size="sm"
                           className="h-8 gap-1"
                         >
-                          <ListFilter className="h-3.5 w-3.5"/>
+                          <ListFilter className="h-3.5 w-3.5" />
                           <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                             Filter
                           </span>
@@ -295,7 +317,7 @@ export const Tasks: FC = () => {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Filter by status</DropdownMenuLabel>
-                        <DropdownMenuSeparator/>
+                        <DropdownMenuSeparator />
                         <DropdownMenuCheckboxItem
                           checked={selectedFilters.status.includes(
                             "In process"
@@ -359,7 +381,7 @@ export const Tasks: FC = () => {
                             className="mb-2"
                           />
 
-                          <DatePickerWithRange className="w-full"/>
+                          <DatePickerWithRange className="w-full" />
 
                           <DialogFooter className="gap-2 sm:justify-between mt-5">
                             <DialogClose asChild>

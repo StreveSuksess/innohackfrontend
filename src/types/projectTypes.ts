@@ -7,7 +7,7 @@ export interface IProject {
   desks: TDesk[];
 }
 
-interface ITask {
+export interface ITask {
   id: string;
   name: string;
   start: string | null;

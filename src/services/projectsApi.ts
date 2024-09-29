@@ -112,6 +112,13 @@ const projectsApi = createApi({
         },
       }),
     }),
+    deleteTask: builder.mutation<any, any>({
+      query: (body: { taskId: string }) => ({
+        url: `/task/`,
+        method: "DELETE",
+        body: body,
+      }),
+    }),
     addTask: builder.mutation<any, any>({
       query: (body: {
         name: string;
@@ -122,6 +129,24 @@ const projectsApi = createApi({
         url: `/task/`,
         method: "POST",
         body: body,
+      }),
+    }),
+    updateTask: builder.mutation<any, any>({
+      query: (body: {
+        name: string;
+        description: string;
+        taskId: string;
+        status: string;
+      }) => ({
+        url: `/task/`,
+        method: "PUT",
+        body: body,
+      }),
+    }),
+    getTask: builder.query<any, any>({
+      query: (deskId: string) => ({
+        url: `/task/${deskId}`,
+        method: "GET",
       }),
     }),
   }),
@@ -136,5 +161,8 @@ export const {
   useAddDeskMutation,
   useDeleteDeskMutation,
   useAddTaskMutation,
+  useGetTaskQuery,
+  useDeleteTaskMutation,
+  useUpdateTaskMutation,
 } = projectsApi;
 export default projectsApi;

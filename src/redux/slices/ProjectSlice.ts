@@ -1,4 +1,4 @@
-import { IProject } from "@/types/projectTypes.ts";
+import { IProject, ITask } from "@/types/projectTypes.ts";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface IInitialState {
@@ -41,6 +41,52 @@ export const ProjectsSLice = createSlice({
         end: action.payload.end,
         description: action.payload.description,
       });
+    },
+    deleteTask: (
+      state,
+      action: PayloadAction<{
+        projectId: string;
+        deskId: string;
+        taskId: string;
+      }>
+    ) => {
+      const projectIndex = state.projects.findIndex(
+        (project) => project.id === action.payload.projectId
+      );
+      const deskIndex = state.projects[projectIndex].desks.findIndex(
+        (desk) => desk.id === action.payload.deskId
+      );
+      const taskIndex = state.projects[projectIndex].desks[
+        deskIndex
+      ].tasks.findIndex((task) => task.id === action.payload.taskId);
+
+      state.projects[projectIndex].desks[deskIndex].tasks.splice(taskIndex, 1);
+    },
+    updateTask: (
+      state,
+      action: PayloadAction<{
+        name: string;
+        taskId: string;
+        projectId: string;
+        deskId: string;
+        status: string;
+      }>
+    ) => {
+      const projectIndex = state.projects.findIndex(
+        (project) => project.id === action.payload.projectId
+      );
+      const deskIndex = state.projects[projectIndex].desks.findIndex(
+        (desk) => desk.id === action.payload.deskId
+      );
+      const taskIndex = state.projects[projectIndex].desks[
+        deskIndex
+      ].tasks.findIndex((task) => task.id === action.payload.taskId);
+
+      state.projects[projectIndex].desks[deskIndex].tasks[taskIndex] = {
+        ...state.projects[projectIndex].desks[deskIndex].tasks[taskIndex],
+        name: action.payload.name,
+        status: action.payload.status,
+      };
     },
     addDesk: (
       state,
@@ -140,6 +186,24 @@ export const ProjectsSLice = createSlice({
       );
 
       state.projects[projectIndex] = action.payload.project;
+    },
+    setTasks: (
+      state,
+      action: PayloadAction<{
+        projectId: string;
+        tasks: ITask[];
+        deskId: string;
+      }>
+    ) => {
+      const projectIndex = state.projects.findIndex(
+        (project) => project.id === action.payload.projectId
+      );
+      const deskIndex = state.projects[projectIndex].desks.findIndex(
+        (desk) => desk.id === action.payload.deskId
+      );
+
+      state.projects[projectIndex].desks[deskIndex].tasks =
+        action.payload.tasks;
     },
   },
 });
