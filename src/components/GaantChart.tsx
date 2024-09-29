@@ -93,7 +93,7 @@ const GanttChart: React.FC<GanttChartProps> = ({
 			switch (status) {
 				case 'NOT_STARTED':
 					return '#f1faee'
-				case 'IN_PROCESS':
+				case 'IN_PROGRESS':
 					return '#ee964b'
 				case 'COMPLETED':
 					return '#80ed99'
