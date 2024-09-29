@@ -1,4 +1,3 @@
-import CreateEntity from '@/components/CreateEntity'
 import { DatePickerWithRange } from '@/components/DatePickerWithRange'
 import { History } from '@/components/History'
 import { Member } from '@/components/Member'
@@ -26,7 +25,6 @@ import {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
 	DropdownMenuContent,
-	DropdownMenuItem,
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
@@ -40,6 +38,8 @@ import {
 	TableRow,
 } from '@/components/ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import axios from 'axios'
+import Cookies from 'js-cookie'
 import { ListFilter, Search } from 'lucide-react'
 import React, { useState, ChangeEvent } from 'react'
 import { Link } from 'react-router-dom'
@@ -70,7 +70,6 @@ export const Tasks: React.FC = () => {
 	const projectName = 'Project Name'
 	const deskName = 'Desk Name'
 
-	// State for tasks
 	const [tasks, setTasks] = useState<TaskType[]>([
 		{
 			id: 1,
@@ -191,8 +190,15 @@ export const Tasks: React.FC = () => {
 		)
 	}
 
-	const addMember = (member: MemberType) => {
-		setMembers(prevMembers => [...prevMembers, member])
+	const [email, setEmail] = useState('')
+	const addMember = async () => {
+		const token = Cookies.get('Authorization')
+		await axios.post(
+			`${import.meta.env.VITE_API_URL}/project/`,
+			{ email },
+			{ headers: { Authorization: token } }
+		)
+		setEmail('')
 	}
 
 	const removeMember = (memberId: number) => {
@@ -379,11 +385,13 @@ export const Tasks: React.FC = () => {
 								rollbackTask={rollbackTask}
 							/>
 						</TabsContent>
+
 						<TabsContent value='members'>
 							<Card x-chunk='dashboard-01-chunk-5'>
 								<CardHeader>
 									<CardTitle>Project Members</CardTitle>
 								</CardHeader>
+
 								<CardContent className='grid gap-8'>
 									{members.map(member => (
 										<Member
@@ -408,7 +416,11 @@ export const Tasks: React.FC = () => {
 											</DialogHeader>
 
 											<form className='w-full'>
-												<Input placeholder='email' />
+												<Input
+													placeholder='email'
+													value={email}
+													onChange={e => setEmail(e.target.value)}
+												/>
 
 												<DialogFooter className='gap-2 sm:justify-between mt-5'>
 													<DialogClose asChild>
@@ -416,6 +428,7 @@ export const Tasks: React.FC = () => {
 															type='submit'
 															variant='default'
 															className='w-full'
+															onClick={addMember}
 														>
 															Save
 														</Button>
