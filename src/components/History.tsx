@@ -13,13 +13,6 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 
-type VersionType = {
-  versionId: number;
-  name: string;
-  status: "In process" | "Completed" | "Failed";
-  timestamp: string;
-};
-
 export const History: React.FC = () => {
   const { deskId } = useParams();
   const { data: historyData, isLoading } = useGetProjectHistoryQuery(deskId);

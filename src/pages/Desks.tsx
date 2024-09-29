@@ -14,7 +14,9 @@ export const Desks = () => {
     console.log(data);
     if (data) {
       setProject({
+        // @ts-ignore
         projectId: projectId,
+        // @ts-ignore
         project: {
           ...data,
           owner: "X",
