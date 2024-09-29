@@ -1,5 +1,6 @@
 import Modal from './Modal'
 import { Button } from './ui/button'
+import { DialogClose } from './ui/dialog'
 import { Input } from './ui/input'
 import { Label } from '@radix-ui/react-label'
 
@@ -14,7 +15,9 @@ const AvatarChanger = () => {
 				<Input id='avatar' placeholder='Avatar' type='file' />
 			</div>
 
-			<Button>Save</Button>
+			<DialogClose>
+				<Button>Save</Button>
+			</DialogClose>
 		</Modal>
 	)
 }

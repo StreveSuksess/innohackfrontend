@@ -202,7 +202,7 @@ export const Tasks: React.FC = () => {
 	const addMember = async () => {
 		const token = Cookies.get('Authorization')
 		await axios.post(
-			`${import.meta.env.VITE_API_URL}/project/`,
+			`${import.meta.env.VITE_API_URL}/project/${currentProject?.id}`,
 			{ email },
 			{ headers: { Authorization: token } }
 		)

@@ -2,7 +2,7 @@ import Modal from './Modal'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
-import { DialogTrigger } from '@/components/ui/dialog.tsx'
+import { DialogClose } from '@/components/ui/dialog.tsx'
 import { useActions } from '@/hooks/useActions.ts'
 import { useUpdateProfileMutation } from '@/services/userApi.ts'
 import { useForm } from 'react-hook-form'
@@ -50,9 +50,11 @@ const PasswordChanger = () => {
 					/>
 				</div>
 
-				<Button type={'submit'} className='w-full'>
-					<DialogTrigger>Save</DialogTrigger>
-				</Button>
+				<DialogClose>
+					<Button type={'submit'} className='w-full'>
+						Save
+					</Button>
+				</DialogClose>
 			</form>
 		</Modal>
 	)

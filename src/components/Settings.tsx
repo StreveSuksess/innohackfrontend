@@ -2,7 +2,7 @@ import Modal from './Modal'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
-import { DialogTrigger } from '@/components/ui/dialog.tsx'
+import { DialogClose, DialogTrigger } from '@/components/ui/dialog.tsx'
 import { useActions } from '@/hooks/useActions.ts'
 import { useAppSelector } from '@/hooks/useAppSelector.ts'
 import { useUpdateProfileMutation } from '@/services/userApi.ts'
@@ -56,9 +56,11 @@ const Settings = () => {
 					/>
 				</div>
 
-				<Button type={'submit'} className='w-full'>
-					<DialogTrigger>Save</DialogTrigger>
-				</Button>
+				<DialogClose>
+					<Button type={'submit'} className='w-full'>
+						Save
+					</Button>
+				</DialogClose>
 			</form>
 		</Modal>
 	)
