@@ -1,4 +1,5 @@
 import { DatePickerWithRange } from '@/components/DatePickerWithRange'
+import GaantPage from '@/components/GaantPage'
 import { Member } from '@/components/Member'
 import { Task } from '@/components/Task'
 import {
@@ -199,6 +200,7 @@ export const Tasks: FC = () => {
 								<TabsTrigger value='tasks'>Tasks</TabsTrigger>
 								<TabsTrigger value='history'>History</TabsTrigger>
 								<TabsTrigger value='members'>Project Members</TabsTrigger>
+								<TabsTrigger value='gaant'>Gaant Chart</TabsTrigger>
 							</TabsList>
 						</div>
 						<TabsContent value='tasks'>
@@ -407,6 +409,17 @@ export const Tasks: FC = () => {
 											</form>
 										</DialogContent>
 									</Dialog>
+								</CardContent>
+							</Card>
+						</TabsContent>
+						<TabsContent value='gaant'>
+							<Card x-chunk='dashboard-01-chunk-5'>
+								<CardHeader>
+									<CardTitle>Gaant Chart</CardTitle>
+								</CardHeader>
+
+								<CardContent className='grid gap-8'>
+									<GaantPage />
 								</CardContent>
 							</Card>
 						</TabsContent>
