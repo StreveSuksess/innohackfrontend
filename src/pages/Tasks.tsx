@@ -1,8 +1,7 @@
-import { DatePickerWithRange } from "@/components/DatePickerWithRange";
-import GaantPage from "@/components/GaantPage";
-import { History } from "@/components/History";
-import { Member } from "@/components/Member";
-import { Task } from "@/components/Task";
+import {DatePickerWithRange} from "@/components/DatePickerWithRange";
+import {History} from "@/components/History";
+import {Member} from "@/components/Member";
+import {Task} from "@/components/Task";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -10,8 +9,8 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {Button} from "@/components/ui/button";
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {
   Dialog,
   DialogClose,
@@ -30,21 +29,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useAppSelector } from "@/hooks/useAppSelector";
+import {Input} from "@/components/ui/input";
+import {Table, TableBody, TableHead, TableHeader, TableRow,} from "@/components/ui/table";
+import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
+import {useActions} from "@/hooks/useActions.ts";
+import {useAppSelector} from "@/hooks/useAppSelector.ts";
+import {useAddTaskMutation} from "@/services/projectsApi.ts";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { ListFilter, Search } from "lucide-react";
-import React, { ChangeEvent, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import {ListFilter, Search} from "lucide-react";
+import {ChangeEvent, FC, useState} from "react";
+import {useForm} from "react-hook-form";
+import {Link, useParams} from "react-router-dom";
 
 type VersionType = {
   versionId: number;
@@ -68,15 +64,9 @@ type MemberType = {
   role: string;
 };
 
-export const Tasks: React.FC = () => {
-  const { projectId, deskId } = useParams();
-
-  const projects = useAppSelector((state) => state.projects.projects);
-  const currentProject = projects.find((project) => project.id === projectId);
-  const currentDesk = currentProject?.desks.find((desk) => desk.id === deskId);
-
-  const projectName = currentProject?.name;
-  const deskName = currentDesk?.title;
+export const Tasks: FC = () => {
+  const projectName = "Project Name";
+  const deskName = "Desk Name";
 
   const [tasks, setTasks] = useState<TaskType[]>([
     {
@@ -122,8 +112,8 @@ export const Tasks: React.FC = () => {
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
 
   const [members, setMembers] = useState<MemberType[]>([
-    { id: 1, name: "John Doe", role: "Developer" },
-    { id: 2, name: "Jane Smith", role: "Designer" },
+    {id: 1, name: "John Doe", role: "Developer"},
+    {id: 2, name: "Jane Smith", role: "Designer"},
   ]);
 
   const handleStatusFilterChange = (status: string, checked: boolean) => {
@@ -202,9 +192,9 @@ export const Tasks: React.FC = () => {
   const addMember = async () => {
     const token = Cookies.get("Authorization");
     await axios.post(
-      `${import.meta.env.VITE_API_URL}/project/invite/${currentProject?.id}`,
-      { email },
-      { headers: { Authorization: token } }
+      `${import.meta.env.VITE_API_URL}/project/`,
+      {email},
+      {headers: {Authorization: token}}
     );
     setEmail("");
   };
@@ -217,6 +207,32 @@ export const Tasks: React.FC = () => {
 
   const selectedTask = tasks.find((task) => task.id === selectedTaskId) || null;
 
+  const {register, handleSubmit} = useForm();
+  const [addTaskFetch] = useAddTaskMutation();
+  const {addTask} = useActions();
+  const {deskId, projectId} = useParams();
+  // @ts-ignore
+  const userEmail = useAppSelector((state) => state.user.email);
+  const tasks = useAppSelector((state) => state.projects.projects[projectId].desks[deskId].tasks);
+
+  const onSubmit = async (data: any) => {
+    const response = await addTaskFetch({
+      name: data.name,
+      description: "description",
+      deskId: deskId,
+      workerEmail: userEmail,
+    });
+
+    addTask({
+      id: response.data.id,
+      name: response.data.name,
+      start: response.data.start ?? null,
+      end: response.data.end ?? null,
+      description: response.data.description,
+      status: response.data.status,
+    });
+  };
+
   return (
     <div className="flex min-h-screen w-full">
       <div className="flex flex-col sm:gap-4 sm:py-4 w-full">
@@ -228,7 +244,7 @@ export const Tasks: React.FC = () => {
                   <Link to="#">{projectName}</Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
-              <BreadcrumbSeparator />
+              <BreadcrumbSeparator/>
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
                   <Link to="#">{deskName}</Link>
@@ -244,7 +260,6 @@ export const Tasks: React.FC = () => {
                 <TabsTrigger value="tasks">Tasks</TabsTrigger>
                 <TabsTrigger value="history">History</TabsTrigger>
                 <TabsTrigger value="members">Project Members</TabsTrigger>
-                <TabsTrigger value="gaant">Gaant Chart</TabsTrigger>
               </TabsList>
             </div>
             <TabsContent value="tasks">
@@ -254,7 +269,7 @@ export const Tasks: React.FC = () => {
 
                   <div className="ml-auto flex items-center gap-2">
                     <div className="relative ml-auto flex-1 md:grow-0">
-                      <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                      <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"/>
                       <Input
                         type="search"
                         placeholder="Search..."
@@ -272,7 +287,7 @@ export const Tasks: React.FC = () => {
                           size="sm"
                           className="h-8 gap-1"
                         >
-                          <ListFilter className="h-3.5 w-3.5" />
+                          <ListFilter className="h-3.5 w-3.5"/>
                           <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                             Filter
                           </span>
@@ -280,7 +295,7 @@ export const Tasks: React.FC = () => {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Filter by status</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
+                        <DropdownMenuSeparator/>
                         <DropdownMenuCheckboxItem
                           checked={selectedFilters.status.includes(
                             "In process"
@@ -334,10 +349,17 @@ export const Tasks: React.FC = () => {
                           </DialogDescription>
                         </DialogHeader>
 
-                        <form className="w-full">
-                          <Input placeholder="Task" className="mb-2" />
+                        <form
+                          onSubmit={handleSubmit(onSubmit)}
+                          className="w-full"
+                        >
+                          <Input
+                            {...register("name")}
+                            placeholder="Task"
+                            className="mb-2"
+                          />
 
-                          <DatePickerWithRange className="w-full" />
+                          <DatePickerWithRange className="w-full"/>
 
                           <DialogFooter className="gap-2 sm:justify-between mt-5">
                             <DialogClose asChild>
@@ -424,7 +446,7 @@ export const Tasks: React.FC = () => {
                         </DialogDescription>
                       </DialogHeader>
 
-                      <div className="w-full">
+                      <form className="w-full">
                         <Input
                           placeholder="email"
                           value={email}
@@ -443,21 +465,9 @@ export const Tasks: React.FC = () => {
                             </Button>
                           </DialogClose>
                         </DialogFooter>
-                      </div>
+                      </form>
                     </DialogContent>
                   </Dialog>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="gaant">
-              <Card x-chunk="dashboard-01-chunk-5">
-                <CardHeader>
-                  <CardTitle>Gaant Chart</CardTitle>
-                </CardHeader>
-
-                <CardContent className="grid gap-8">
-                  <GaantPage />
                 </CardContent>
               </Card>
             </TabsContent>

@@ -20,6 +20,10 @@ export const ProjectsSLice = createSlice({
         id: string;
         projectId: string;
         deskId: string;
+        status: string;
+        start: string | null;
+        end: string | null;
+        description: string;
       }>
     ) => {
       const projectIndex = state.projects.findIndex(
@@ -32,7 +36,10 @@ export const ProjectsSLice = createSlice({
       state.projects[projectIndex].desks[deskIndex].tasks.push({
         id: action.payload.id,
         name: action.payload.name,
-        status: "In progress",
+        status: action.payload.status,
+        start: action.payload.start,
+        end: action.payload.end,
+        description: action.payload.description,
       });
     },
     addDesk: (

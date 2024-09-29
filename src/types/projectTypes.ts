@@ -7,9 +7,12 @@ export interface IProject {
   desks: TDesk[];
 }
 
-export interface ITask {
+interface ITask {
   id: string;
   name: string;
+  start: string | null;
+  end: string | null;
+  description: string;
   status: string;
 }
 
