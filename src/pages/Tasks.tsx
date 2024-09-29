@@ -46,18 +46,10 @@ import Cookies from "js-cookie";
 import { ListFilter, Search } from "lucide-react";
 import { ChangeEvent, FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate, useParams } from "react-router-dom";
-
-
-type MemberType = {
-  id: number;
-  name: string;
-  role: string;
-};
+import { Link, useParams } from "react-router-dom";
 
 export const Tasks: FC = () => {
   const { deskId, projectId } = useParams();
-  const navigate = useNavigate();
   const tasks = useAppSelector((state) => {
     const projectIndex = state.projects.projects.findIndex(
       (project) => project.id === projectId
@@ -87,10 +79,10 @@ export const Tasks: FC = () => {
 
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
 
-  const [members, setMembers] = useState<MemberType[]>([
-    { id: 1, name: "John Doe", role: "Developer" },
-    { id: 2, name: "Jane Smith", role: "Designer" },
-  ]);
+  const members =
+    useAppSelector((state) => state.projects.projects).find(
+      (project) => project.id === projectId
+    )?.members ?? [];
 
   const handleStatusFilterChange = (status: string, checked: boolean) => {
     setSelectedFilters((prevFilters) => {
@@ -142,7 +134,6 @@ export const Tasks: FC = () => {
   const [dataTaskFrom, setData] = useState({ from: null, to: null });
 
   const onSubmit = async (data: any) => {
-    console.log(dataTaskFrom);
     try {
       const response = await addTaskFetch({
         name: data.name,
@@ -374,11 +365,7 @@ export const Tasks: FC = () => {
 
                 <CardContent className="grid gap-8">
                   {members.map((member) => (
-                    <Member
-                      key={member.id}
-                      member={member}
-                      removeMember={removeMember}
-                    />
+                    <Member key={member.id} member={member} />
                   ))}
 
                   <Dialog>
