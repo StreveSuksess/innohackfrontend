@@ -47,22 +47,6 @@ import { ChangeEvent, FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useParams } from "react-router-dom";
 
-type VersionType = {
-  versionId: number;
-  name: string;
-  status: "In process" | "Completed" | "Failed";
-  timestamp: string;
-};
-
-type TaskType = {
-  id: number;
-  name: string;
-  status: "In process" | "Completed" | "Failed";
-  creator: string;
-  createdAt: string;
-  versions: VersionType[];
-};
-
 type MemberType = {
   id: number;
   name: string;
@@ -116,6 +100,7 @@ export const Tasks: FC = () => {
       };
     });
   };
+
   //
   // const updateTask = (updatedTask: TaskType) => {
   //   setTasks((prevTasks) =>
