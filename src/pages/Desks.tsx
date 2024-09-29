@@ -30,5 +30,5 @@ export const Desks = () => {
     }
   }, [isLoading]);
 
-  return <div className=""></div>;
+  return <div></div>;
 };

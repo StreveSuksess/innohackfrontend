@@ -4,10 +4,11 @@ import { Label } from "./ui/label";
 import { Button } from "@/components/ui/button.tsx";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog.tsx";
 import { useActions } from "@/hooks/useActions.ts";
-import { useAddProjectMutation } from "@/services/projectsApi.ts";
+import { useAddDeskMutation } from "@/services/projectsApi.ts";
 import { Loader } from "lucide-react";
 import { PropsWithChildren } from "react";
 import { useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
 
 
 interface CreateEntityProps {
@@ -25,20 +26,22 @@ const CreateEntity = ({
   isName = true,
 }: PropsWithChildren<CreateEntityProps>) => {
   const { register, handleSubmit } = useForm<any>();
-  const [addProjectFetch, { isLoading }] = useAddProjectMutation();
-  const { addProject } = useActions();
+  const [addDeskFetch, { isLoading }] = useAddDeskMutation();
+  const { addDesk } = useActions();
+  const { projectId } = useParams();
 
-  const onSubmit = async (data: { name: string; description: string }) => {
+  const onSubmit = async (data: { name: string }) => {
     try {
-      const response = await addProjectFetch(data);
-      addProject({
-        projectName: response.data.name,
+      console.log(data);
+      const response = await addDeskFetch({
+        projectId: projectId,
+        name: data.name,
+      });
+      console.log(response);
+      addDesk({
         id: response.data.id,
-        ownerName:
-          response.data.creator.firstName +
-          " " +
-          response.data.creator.lastName,
-        description: response.data.description,
+        name: response.data.title,
+        projectId: response.data.project.id,
       });
     } catch (e) {
       console.log(e);
@@ -60,13 +63,6 @@ const CreateEntity = ({
               {...register("name")}
               id={title}
               placeholder={`${title} ${isName ? "name" : ""}`}
-            />
-
-            <Input
-              {...register("description")}
-              placeholder="Description"
-              id="description"
-              className={"mt-2"}
             />
           </div>
         </div>

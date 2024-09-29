@@ -96,6 +96,22 @@ const projectsApi = createApi({
         method: "GET",
       }),
     }),
+    addDesk: builder.mutation<any, any>({
+      query: (body: { projectId: string; name: "string" }) => ({
+        url: `/desk/`,
+        method: "POST",
+        body: body,
+      }),
+    }),
+    deleteDesk: builder.mutation<any, any>({
+      query: (body: { deskId: string }) => ({
+        url: `/desk`,
+        method: "DELETE",
+        body: {
+          desk_id: body.deskId,
+        },
+      }),
+    }),
   }),
 });
 
@@ -105,5 +121,7 @@ export const {
   useEditProjectMutation,
   useDeleteProjectMutation,
   useGetProjectQuery,
+  useAddDeskMutation,
+  useDeleteDeskMutation,
 } = projectsApi;
 export default projectsApi;

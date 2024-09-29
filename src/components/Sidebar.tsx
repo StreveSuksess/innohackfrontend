@@ -1,6 +1,7 @@
 import CreateEntity from "./CreateEntity";
 import ProfileLink from "./ProfileLink";
 import { Input } from "./ui/input";
+import CreateEntityAddDesk from "@/components/CreateEntityAddDesk.tsx";
 import { useAppSelector } from "@/hooks/useAppSelector";
 import { ChevronLeftIcon, Squares2X2Icon } from "@heroicons/react/24/outline";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
@@ -52,18 +53,20 @@ const Sidebar = () => {
             <nav className="space-y-2">
               {projects
                 .find((project) => project.id === projectId)
-                ?.desks.map((desk) => (
-                  <a
-                    key={desk.name}
-                    // href={desk.href}
-                    className="flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-zinc-800 transition-colors duration-200"
-                  >
-                    <Squares2X2Icon className="w-5 h-5 mr-3" />
-                    {desk.name}
-                  </a>
-                ))}
+                ?.desks.map((desk) => {
+                  return (
+                    <Link
+                      key={desk.id}
+                      to={`/projects/${projectId}/desk/${desk.id}`}
+                      className="flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-zinc-800 transition-colors duration-200"
+                    >
+                      <Squares2X2Icon className="w-5 h-5 mr-3" />
+                      {desk.title ?? desk.name}
+                    </Link>
+                  );
+                })}
 
-              <CreateEntity
+              <CreateEntityAddDesk
                 title="Create a desk"
                 description="Create a new desk"
                 className="bg-white text-black flex justify-center items-center hover:bg-white"
