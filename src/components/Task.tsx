@@ -141,7 +141,7 @@ export const Task: FC<TaskProps> = ({ task, updateTask }) => {
 					}}
 				>
 					<ToggleGroupItem value='COMPLETED'>Completed</ToggleGroupItem>
-					<ToggleGroupItem value='IN_PROCESS'>In process</ToggleGroupItem>
+					<ToggleGroupItem value='IN_PROGRESS'>In progress</ToggleGroupItem>
 					<ToggleGroupItem value='FAILED'>Failed</ToggleGroupItem>
 					<ToggleGroupItem value='NOT_STARTED'>Not started</ToggleGroupItem>
 				</ToggleGroup>

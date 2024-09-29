@@ -17,7 +17,7 @@ export const DatePicker = () => {
 		<Popover>
 			<PopoverTrigger asChild>
 				<Button
-					variant={'outline'}
+					variant='outline'
 					className={cn(
 						'w-[100%] justify-start text-left font-normal',
 						!date && 'text-muted-foreground'

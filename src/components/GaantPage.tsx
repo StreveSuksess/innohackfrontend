@@ -9,7 +9,7 @@ const getStatusString = (status: string) => {
 	switch (status) {
 		case 'NOT_STARTED':
 			return 'Not started'
-		case 'IN_PROCESS':
+		case 'IN_PROGRESS':
 			return 'In process'
 		case 'COMPLETED':
 			return 'Completed'
