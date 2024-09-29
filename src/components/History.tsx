@@ -8,6 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useGetProjectHistoryQuery } from "@/services/projectsApi.ts";
+import { Loader } from "lucide-react";
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
@@ -19,23 +20,7 @@ type VersionType = {
   timestamp: string;
 };
 
-type TaskType = {
-  id: number;
-  name: string;
-  status: "In process" | "Completed" | "Failed";
-  creator: string;
-  createdAt: string;
-  versions: VersionType[];
-};
-
-type HistoryProps = {
-  tasks: TaskType[];
-  selectedTask: TaskType | null;
-  setSelectedTaskId: React.Dispatch<React.SetStateAction<number | null>>;
-  rollbackTask: (taskId: number, version: VersionType) => void;
-};
-
-export const History: React.FC<HistoryProps> = () => {
+export const History: React.FC = () => {
   const { deskId } = useParams();
   const { data: historyData, isLoading } = useGetProjectHistoryQuery(deskId);
 
@@ -43,6 +28,8 @@ export const History: React.FC<HistoryProps> = () => {
     if (isLoading) return;
     console.log(historyData);
   });
+
+  if (isLoading) return <Loader />;
 
   return (
     <Card>
@@ -56,19 +43,24 @@ export const History: React.FC<HistoryProps> = () => {
               <TableHead>Version ID</TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead>Type</TableHead>
               <TableHead>Timestamp</TableHead>
-              <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow key={"x"}>
-              <TableCell>{"x"}</TableCell>
-              <TableCell>{"name"}</TableCell>
-              <TableCell>{"status"}</TableCell>
-              <TableCell>{"timestamp"}</TableCell>
-              <TableCell>{"timestamp"}</TableCell>
-              <TableCell>{"timestamp"}</TableCell>
-            </TableRow>
+            {historyData.slice(0, 20).map((data: any) => (
+              <TableRow key={data[0].timestamp}>
+                <TableCell>{data[0].revision_id}</TableCell>
+                <TableCell>{data[0].name}</TableCell>
+                <TableCell>{data[0].status}</TableCell>
+                <TableCell>{data[0].revision_type}</TableCell>
+                <TableCell>
+                  {new Date(
+                    data[0].revision_timestamp * 1
+                  ).toLocaleDateString()}
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </CardContent>
