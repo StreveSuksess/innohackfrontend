@@ -58,8 +58,8 @@ const GanttChart: React.FC<GanttChartProps> = ({
 		const xScale = d3
 			.scaleTime()
 			.domain([
-				d3.min(tasks, d => d.start) as Date,
-				d3.max(tasks, d => d.end) as Date,
+				d3.min(tasks, d => new Date(d.start)) as Date,
+				d3.max(tasks, d => new Date(d.end)) as Date,
 			])
 			.range([0, width])
 
@@ -109,9 +109,9 @@ const GanttChart: React.FC<GanttChartProps> = ({
 			.data(tasks)
 			.enter()
 			.append('rect')
-			.attr('x', d => xScale(d.start))
+			.attr('x', d => xScale(new Date(d.start)))
 			.attr('y', d => yScale(d.name) as number)
-			.attr('width', d => xScale(d.end) - xScale(d.start))
+			.attr('width', d => xScale(new Date(d.end)) - xScale(new Date(d.start)))
 			.attr('height', yScale.bandwidth() * 0.8)
 			.attr('rx', 5)
 			.attr('ry', 5)
@@ -127,7 +127,7 @@ const GanttChart: React.FC<GanttChartProps> = ({
 			.data(tasks)
 			.enter()
 			.append('text')
-			.attr('x', d => xScale(d.start) + 5)
+			.attr('x', d => xScale(new Date(d.start)) + 5)
 			.attr('y', d => (yScale(d.name) as number) + yScale.bandwidth() / 2)
 			.attr('text-anchor', 'start')
 			.text(d => d.name)
@@ -146,12 +146,15 @@ const GanttChart: React.FC<GanttChartProps> = ({
 				const newXScale = event.transform.rescaleX(xScale)
 				xAxisGroup.call(xAxis.scale(newXScale))
 				taskRects
-					.attr('x', d => newXScale(d.start))
-					.attr('width', d => newXScale(d.end) - newXScale(d.start))
+					.attr('x', d => newXScale(new Date(d.start)))
+					.attr(
+						'width',
+						d => newXScale(new Date(d.end)) - newXScale(new Date(d.start))
+					)
 
 				taskLabels
 					.selectAll<SVGTextElement, Task>('text')
-					.attr('x', d => newXScale(d.start))
+					.attr('x', d => newXScale(new Date(d.start)))
 			})
 
 		svg.call(zoom)
