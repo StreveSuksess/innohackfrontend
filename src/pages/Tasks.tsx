@@ -42,6 +42,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useActions } from '@/hooks/useActions.ts'
 import { useAppSelector } from '@/hooks/useAppSelector.ts'
 import { useAddTaskMutation, useGetTaskQuery } from '@/services/projectsApi.ts'
+import { current } from '@reduxjs/toolkit'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { ListFilter, Search } from 'lucide-react'
@@ -62,14 +63,14 @@ export const Tasks: FC = () => {
 		return state.projects.projects[projectIndex]?.desks[deskIndex]?.tasks ?? []
 	})
 
-	const projectName =
-		useAppSelector(state => state.projects.projects).find(
-			project => project.id === projectId
-		)?.name ?? 'Project'
-	const deskName =
-		useAppSelector(state => state.projects.projects)
-			.find(project => project.id === projectId)
-			?.desks.find(desk => desk.id === deskId)?.name ?? 'Desk'
+	const currentProject = useAppSelector(state => state.projects.projects).find(
+		project => project.id === projectId
+	)
+	const currentDesk = currentProject?.desks.find(desk => desk.id === deskId)
+
+	const projectName = currentProject?.name ?? 'Project'
+
+	const deskName = currentDesk?.title ?? 'Desk'
 	const [searchTerm, setSearchTerm] = useState<string>('')
 
 	const [selectedFilters, setSelectedFilters] = useState<{

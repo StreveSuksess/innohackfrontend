@@ -97,10 +97,9 @@ export const ProjectsSLice = createSlice({
 				state.projects.findIndex(
 					project => project.id === action.payload.projectId
 				)
-				//@ts-ignore
 			].desks.push({
 				id: action.payload.id,
-				name: action.payload.name,
+				title: action.payload.name,
 				tasks: [],
 			})
 		},
@@ -134,7 +133,7 @@ export const ProjectsSLice = createSlice({
 				desk => desk.id === action.payload.deskId
 			)
 
-			state.projects[projectIndex].desks[deskIndex].name =
+			state.projects[projectIndex].desks[deskIndex].title =
 				action.payload.newName
 		},
 		addProject: (
