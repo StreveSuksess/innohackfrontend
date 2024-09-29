@@ -149,6 +149,12 @@ const projectsApi = createApi({
         method: "GET",
       }),
     }),
+    getProjectHistory: builder.query<any, any>({
+      query: (deskId: string) => ({
+        url: `/desk/history?desk_id=${deskId}}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 

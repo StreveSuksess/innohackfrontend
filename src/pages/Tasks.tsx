@@ -195,6 +195,8 @@ export const Tasks: FC = () => {
       description: "description",
       deskId: deskId,
       workerEmail: userEmail,
+      start: data.start,
+      end: data.end,
     });
 
     addTask({
