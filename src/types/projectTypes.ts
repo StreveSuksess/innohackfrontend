@@ -10,12 +10,12 @@ export interface IProject {
 export interface ITask {
   id: string;
   name: string;
-  status: "Completed" | "In process" | "Failed";
+  status: string;
 }
 
 export type TDesk = {
   name: string;
-  projects: IProject[];
+  tasks: ITask[];
   id: string;
 };
 

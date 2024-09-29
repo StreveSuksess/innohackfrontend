@@ -112,6 +112,18 @@ const projectsApi = createApi({
         },
       }),
     }),
+    addTask: builder.mutation<any, any>({
+      query: (body: {
+        name: string;
+        description: string;
+        deskId: string;
+        workerEmail: string;
+      }) => ({
+        url: `/task/`,
+        method: "POST",
+        body: body,
+      }),
+    }),
   }),
 });
 
@@ -123,5 +135,6 @@ export const {
   useGetProjectQuery,
   useAddDeskMutation,
   useDeleteDeskMutation,
+  useAddTaskMutation,
 } = projectsApi;
 export default projectsApi;

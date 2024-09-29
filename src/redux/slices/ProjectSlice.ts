@@ -13,6 +13,28 @@ export const ProjectsSLice = createSlice({
   name: "projects",
   initialState,
   reducers: {
+    addTask: (
+      state,
+      action: PayloadAction<{
+        name: string;
+        id: string;
+        projectId: string;
+        deskId: string;
+      }>
+    ) => {
+      const projectIndex = state.projects.findIndex(
+        (project) => project.id === action.payload.projectId
+      );
+      const deskIndex = state.projects[projectIndex].desks.findIndex(
+        (desk) => desk.id === action.payload.deskId
+      );
+
+      state.projects[projectIndex].desks[deskIndex].tasks.push({
+        id: action.payload.id,
+        name: action.payload.name,
+        status: "In progress",
+      });
+    },
     addDesk: (
       state,
       action: PayloadAction<{ name: string; id: string; projectId: string }>
@@ -21,9 +43,11 @@ export const ProjectsSLice = createSlice({
         state.projects.findIndex(
           (project) => project.id === action.payload.projectId
         )
+        //@ts-ignore
       ].desks.push({
         id: action.payload.id,
         name: action.payload.name,
+        tasks: [],
       });
     },
     deleteDesk: (
