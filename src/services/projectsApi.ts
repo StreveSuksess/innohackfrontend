@@ -151,7 +151,7 @@ const projectsApi = createApi({
     }),
     getProjectHistory: builder.query<any, any>({
       query: (deskId: string) => ({
-        url: `/desk/history?desk_id=${deskId}}`,
+        url: `/desk/history?desk_id=${deskId}`,
         method: "GET",
       }),
     }),
@@ -170,5 +170,6 @@ export const {
   useGetTaskQuery,
   useDeleteTaskMutation,
   useUpdateTaskMutation,
+  useGetProjectHistoryQuery,
 } = projectsApi;
 export default projectsApi;

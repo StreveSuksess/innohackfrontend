@@ -1,5 +1,6 @@
 import { DatePickerWithRange } from "@/components/DatePickerWithRange";
 import GaantPage from "@/components/GaantPage";
+import { History } from "@/components/History.tsx";
 import { Member } from "@/components/Member";
 import { Task } from "@/components/Task";
 import {
@@ -77,8 +78,6 @@ export const Tasks: FC = () => {
     status: [],
   });
 
-  const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
-
   const members =
     useAppSelector((state) => state.projects.projects).find(
       (project) => project.id === projectId
@@ -116,15 +115,6 @@ export const Tasks: FC = () => {
     );
     setEmail("");
   };
-
-  const removeMember = (memberId: number) => {
-    setMembers((prevMembers) =>
-      prevMembers.filter((member) => member.id !== memberId)
-    );
-  };
-
-  const selectedTask = tasks.find((task) => task.id === selectedTaskId) || null;
-
   const { register, handleSubmit } = useForm();
   const [addTaskFetch] = useAddTaskMutation();
   const { addTask, setTasks } = useActions();
@@ -160,7 +150,6 @@ export const Tasks: FC = () => {
   };
 
   useEffect(() => {
-    console.log(taskData);
     if (isLoading || !taskData) return;
     setTasks({
       tasks: taskData,
@@ -349,12 +338,7 @@ export const Tasks: FC = () => {
               </Card>
             </TabsContent>
             <TabsContent value="history">
-              {/*<History*/}
-              {/*  tasks={tasks}*/}
-              {/*  selectedTask={selectedTask}*/}
-              {/*  setSelectedTaskId={setSelectedTaskId}*/}
-              {/*  rollbackTask={rollbackTask}*/}
-              {/*/>*/}
+              <History />
             </TabsContent>
 
             <TabsContent value="members">
